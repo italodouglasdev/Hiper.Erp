@@ -6,4 +6,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="FormasPagamentos\" />
+    <Folder Include="Vendas\" />
+    <Folder Include="Produtos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hiper.Erp.Aplicacao.Interfaces\Hiper.Erp.Aplicacao.Interfaces.csproj" />
+  </ItemGroup>
+
 </Project>

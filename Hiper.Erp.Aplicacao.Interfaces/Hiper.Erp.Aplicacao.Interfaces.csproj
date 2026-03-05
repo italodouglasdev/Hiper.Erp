@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Hiper.Erp.Aplicacao.Dtos\Hiper.Erp.Aplicacao.Dtos.csproj" />
+    <ProjectReference Include="..\Hiper.Erp.Dominio.Entidades\Hiper.Erp.Dominio.Entidades.csproj" />
+  </ItemGroup>
+
 </Project>
