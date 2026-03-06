@@ -5,6 +5,10 @@
     <Project Path="Hiper.Erp.Aplicacao.Mapeadores/Hiper.Erp.Aplicacao.Mapeadores.csproj" />
     <Project Path="Hiper.Erp.Aplicacao.Servicos/Hiper.Erp.Aplicacao.Servicos.csproj" />
   </Folder>
+  <Folder Name="/Apresentacao/">
+    <Project Path="Hiper.Erp.Apresentacao.Api/Hiper.Erp.Apresentacao.Api.csproj" />
+    <Project Path="Hiper.Erp.Apresentacao.Web/Hiper.Erp.Apresentacao.Web.csproj" />
+  </Folder>
   <Folder Name="/Dominio/">
     <Project Path="Hiper.Erp.Dominio.Atributos/Hiper.Erp.Dominio.Atributos.csproj" />
     <Project Path="Hiper.Erp.Dominio.Entidades/Hiper.Erp.Dominio.Entidades.csproj" />

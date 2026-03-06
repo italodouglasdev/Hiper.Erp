@@ -14,5 +14,10 @@ namespace Hiper.Erp.Infraestrutura.Bancos
         public DbSet<EntidadeVenda> Vendas { get; set; }
         public DbSet<EntidadeVendaItem> VendasItens { get; set; }
 
+
+        public RetaguardaDbContext(DbContextOptions<RetaguardaDbContext> options) : base(options)
+        {
+        }
+
     }
 }

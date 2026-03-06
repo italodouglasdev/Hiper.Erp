@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hiper.Erp.Aplicacao.Interfaces\Hiper.Erp.Aplicacao.Interfaces.csproj" />
+    <ProjectReference Include="..\Hiper.Erp.Aplicacao.Mapeadores\Hiper.Erp.Aplicacao.Mapeadores.csproj" />
+    <ProjectReference Include="..\Hiper.Erp.Aplicacao.Servicos\Hiper.Erp.Aplicacao.Servicos.csproj" />
+    <ProjectReference Include="..\Hiper.Erp.Infraestrutura.Cache\Hiper.Erp.Infraestrutura.Cache.csproj" />
+    <ProjectReference Include="..\Hiper.Erp.Infraestrutura.Repositorios\Hiper.Erp.Infraestrutura.Repositorios.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.13" />
+    <PackageReference Include="Microsoft.SqlServer.Server" Version="1.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\FormasPagamentos\" />
+    <Folder Include="Controllers\Vendas\" />
+    <Folder Include="Controllers\Produtos\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+</Project>

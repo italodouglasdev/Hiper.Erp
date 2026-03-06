@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hiper.Erp.Dominio.Atributos\Hiper.Erp.Dominio.Atributos.csproj" />
+    <ProjectReference Include="..\Hiper.Erp.Dominio.Enumeradores\Hiper.Erp.Dominio.Enumeradores.csproj" />
   </ItemGroup>
 
 </Project>
