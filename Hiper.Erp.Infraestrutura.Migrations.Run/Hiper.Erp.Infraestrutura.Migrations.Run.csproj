@@ -4,6 +4,18 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hiper.Erp.Dominio.Atributos\Hiper.Erp.Dominio.Atributos.csproj" />
+    <ProjectReference Include="..\Hiper.Erp.Dominio.Enumeradores\Hiper.Erp.Dominio.Enumeradores.csproj" />
+    <ProjectReference Include="..\Hiper.Erp.Infraestrutura.Bancos\Hiper.Erp.Infraestrutura.Bancos.csproj" />
+  </ItemGroup>
 
 </Project>
