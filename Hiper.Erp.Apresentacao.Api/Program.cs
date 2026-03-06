@@ -9,6 +9,18 @@ using Hiper.Erp.Infraestrutura.Bancos;
 using Hiper.Erp.Infraestrutura.Bancos.SGDBs.Fabricas;
 using Hiper.Erp.Infraestrutura.Cache;
 using Hiper.Erp.Infraestrutura.Repositorios.Agentes;
+using Hiper.Erp.Aplicacao.Interfaces.Repositorios.Produtos;
+using Hiper.Erp.Infraestrutura.Repositorios.Produtos;
+using Hiper.Erp.Aplicacao.Interfaces.Servicos.Produtos;
+using Hiper.Erp.Aplicacao.Servicos.Produtos;
+using Hiper.Erp.Aplicacao.Interfaces.Repositorios.FormasPagamentos;
+using Hiper.Erp.Infraestrutura.Repositorios.FormasPagamentos;
+using Hiper.Erp.Aplicacao.Interfaces.Servicos.FormasPagamentos;
+using Hiper.Erp.Aplicacao.Servicos.FormasPagamentos;
+using Hiper.Erp.Aplicacao.Interfaces.Repositorios.Vendas;
+using Hiper.Erp.Infraestrutura.Repositorios.Vendas;
+using Hiper.Erp.Aplicacao.Interfaces.Servicos.Vendas;
+using Hiper.Erp.Aplicacao.Servicos.Vendas;
 using Hiper.Erp.Infraestrutura.Repositorios.ServicoExternos.Tenant;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -52,11 +64,18 @@ builder.Services.AddScoped<RetaguardaDbContext>(provider =>
 
 // 5. UnitOfWork e Repositórios (Agora recebem o DbContext injetado)
 builder.Services.AddScoped<IRepositorioAgentes, RepositorioAgentesDb>();
+builder.Services.AddScoped<IRepositorioProdutos, RepositorioProdutosDb>();
+builder.Services.AddScoped<IRepositorioFormasPagamentos, RepositorioFormasPagamentosDb>();
+builder.Services.AddScoped<IRepositorioVendas, RepositorioVendasDb>();
+builder.Services.AddScoped<IRepositorioVendasItens, RepositorioVendasItensDb>();
 
 
 // 6. Serviços de Aplicação
 builder.Services.AddScoped<IServicoAgentes, ServicoAgentes>();
-//builder.Services.AddScoped<IServicoProdutos, ServicoProdutos>();
+builder.Services.AddScoped<IServicoProdutos, ServicoProdutos>();
+builder.Services.AddScoped<IServicoFormasPagamentos, ServicoFormasPagamentos>();
+builder.Services.AddScoped<IServicoVendas, ServicoVendas>();
+builder.Services.AddScoped<IServicoVendasItens, ServicoVendasItens>();
 
 
 // 7. Mapeador
