@@ -1,0 +1,36 @@
+<div class="card card-light mb-2">
+    <div class="card-header">
+        <h4 class="card-title w-100">
+            <a class="d-block w-100 @(Expanded ? "" : "collapsed")"
+               data-toggle="collapse"
+               href="#@_contentId"
+               aria-expanded="@(Expanded ? "true" : "false")">
+                @if (!string.IsNullOrEmpty(Icon))
+                {
+                    <i class="@Icon mr-1"></i>
+                }
+                @Title
+            </a>
+        </h4>
+    </div>
+
+    <div id="@_contentId"
+         class="collapse @(Expanded ? "show" : "")"
+         data-parent="#@ParentId">
+        <div class="card-body">
+            @ChildContent
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Icon { get; set; }
+    [Parameter] public bool Expanded { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    [CascadingParameter]
+    public string ParentId { get; set; }
+
+    private string _contentId = $"collapse-{Guid.NewGuid():N}";
+}

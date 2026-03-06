@@ -1,0 +1,17 @@
+<div class="progress @Class" role="progressbar" aria-label="@Label" aria-valuenow="@Value" aria-valuemin="0" aria-valuemax="100" style="height: @(Height)px;" @attributes="AdditionalAttributes">
+  <div class="progress-bar @(Striped ? "progress-bar-striped" : "") @(Animated ? "progress-bar-animated" : "") bg-@Variant" style="width: @Value%">
+      @if (ShowLabel) { @($"{Value}%") }
+  </div>
+</div>
+
+@code {
+    [Parameter] public int Value { get; set; }
+    [Parameter] public string Variant { get; set; } = "primary";
+    [Parameter] public bool Striped { get; set; }
+    [Parameter] public bool Animated { get; set; }
+    [Parameter] public bool ShowLabel { get; set; }
+    [Parameter] public string Label { get; set; } = "Progresso";
+    [Parameter] public int Height { get; set; } = 16;
+    [Parameter] public string Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
+}

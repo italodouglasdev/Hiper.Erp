@@ -1,0 +1,28 @@
+﻿<div class="btn-group @Class">
+    <button type="button"
+            class="btn @ButtonClass dropdown-toggle dropdown-icon"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+
+        @if (!string.IsNullOrEmpty(Icon))
+        {
+            <i class="@Icon"></i>
+        }
+
+        @Title
+    </button>
+
+    <div class="dropdown-menu @MenuClass">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Icon { get; set; }
+    [Parameter] public string Class { get; set; }
+    [Parameter] public string ButtonClass { get; set; } = "btn-default";
+    [Parameter] public string MenuClass { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

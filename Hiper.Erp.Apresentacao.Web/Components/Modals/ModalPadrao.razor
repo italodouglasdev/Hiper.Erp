@@ -1,0 +1,114 @@
+@using Microsoft.AspNetCore.Components.Web
+@inject IJSRuntime JS
+
+
+@if (Visible)
+{
+    <div class="modal fade show d-block"
+         tabindex="-1"
+         role="dialog"
+         style="background-color: rgba(0,0,0,0.5);"
+         @onclick="OnBackdropClick"
+         @onkeydown="HandleKeyDown"
+         @attributes="AdditionalAttributes">
+
+        <div class="modal-dialog
+                            @(FullscreenMobile ? "modal-fullscreen-sm-down" : "")
+                            @(Centered ? "modal-dialog-centered" : "")
+                            @(Scrollable ? "modal-dialog-scrollable" : "")
+                            @(SizeClass)">
+
+            <div class="modal-content" @onclick:stopPropagation="true">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">@Title</h5>
+
+                    @if (ShowCloseButton)
+                    {
+                        <button type="button"
+                                class="btn btn-sm btn-default"
+                                @onclick="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    }
+                </div>
+
+                <div class="modal-body">
+                    @ChildContent
+                </div>
+
+                @if (FooterContent != null)
+                {
+                    <div class="modal-footer">
+                        @FooterContent
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter] public string Title { get; set; }
+
+    [Parameter] public bool Visible { get; set; }
+    [Parameter] public EventCallback<bool> VisibleChanged { get; set; }
+
+    [Parameter] public bool Centered { get; set; } = true;
+    [Parameter] public bool Scrollable { get; set; } = true;
+    [Parameter] public bool FullscreenMobile { get; set; } = true;
+    [Parameter] public bool CloseOnBackdrop { get; set; } = true;
+
+    [Parameter] public bool CloseOnEsc { get; set; } = true;
+    [Parameter] public bool ShowCloseButton { get; set; } = true;
+
+    [Parameter] public string Size { get; set; } = "md"; // sm, md, lg, xl
+
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment FooterContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; }
+
+
+    private string SizeClass =>
+        Size?.ToLower() switch
+        {
+            "sm" => "modal-sm",
+            "lg" => "modal-lg",
+            "xl" => "modal-xl",
+            _ => ""
+        };
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (Visible)
+            await JS.InvokeVoidAsync("document.body.classList.add", "modal-open");
+        else
+            await JS.InvokeVoidAsync("document.body.classList.remove", "modal-open");
+    }
+
+
+    private async Task Close()
+    {
+        Visible = false;
+        await VisibleChanged.InvokeAsync(false);
+    }
+
+    private async Task OnBackdropClick()
+    {
+        if (!CloseOnBackdrop)
+            return;
+
+        await Close();
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (CloseOnEsc && e.Key == "Escape")
+            await Close();
+    }
+}

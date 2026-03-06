@@ -1,3 +1,21 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
-@Body
+<div class="wrapper">
+
+    <NavbarPadrao></NavbarPadrao>
+
+    <SidebarPadrao></SidebarPadrao>
+
+    <div class="content-wrapper p-2">
+        @*  <div class="content"> *@
+        <div class="container-fluid">
+
+            @Body
+
+        </div>
+        @*  </div> *@
+    </div>
+
+    <FooterPadrao></FooterPadrao>
+
+</div>

@@ -1,0 +1,13 @@
+<button type="button"
+        class="btn btn-default @Class"
+        disabled="@Inativo"
+        @onclick="OnClick">
+    @ChildContent
+</button>
+
+@code {
+    [Parameter] public bool Inativo { get; set; }
+    [Parameter] public string Class { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public EventCallback OnClick { get; set; }
+}

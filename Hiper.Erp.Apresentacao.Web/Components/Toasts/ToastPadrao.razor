@@ -1,0 +1,33 @@
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div class="toast @(Visible ? "show" : "hide") @Class" role="alert" aria-live="assertive" aria-atomic="true" @attributes="AdditionalAttributes">
+        <div class="toast-header">
+            @if (!string.IsNullOrEmpty(IconClass))
+            {
+                <i class="@IconClass me-2"></i>
+            }
+            <strong class="me-auto">@Title</strong>
+            <small>@Subtitle</small>
+            <button type="button" class="btn-close" @onclick="Close"></button>
+        </div>
+        <div class="toast-body">
+            @ChildContent
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Subtitle { get; set; }
+    [Parameter] public string IconClass { get; set; }
+    [Parameter] public bool Visible { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public string Class { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
+
+    private async Task Close()
+    {
+        Visible = false;
+        await OnClose.InvokeAsync();
+    }
+}

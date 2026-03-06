@@ -1,0 +1,82 @@
+﻿@inject IJSRuntime JS
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="/" class="brand-link">
+        <span class="brand-text font-weight-light">idSaas ERP</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img id="parametros-usuario-foto" src="images/user-default.png" class="elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="javascript:void(0);" class="d-block" @onclick='() => ChamarJS("CarregarModalFormulario", "Cadastro", "Agentes", 0)'>Usuário</a>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                <li class="nav-item">
+                    <a href="javascript:void(0);" @onclick='() => ChamarJS("CarregarPartialView", "div-principal", "DashBoard", "DashBoardGeralVer", 0)' class="nav-link">
+                        <i class="nav-icon fas fa-th-large"></i>
+                        <p> DashBoard </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-folder-open"></i>
+                        <p>
+                            Cadastros
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/Agentes/Agente" class="nav-link">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p> Agentes</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:void(0);" @onclick='() => ChamarJS("CarregarTabela", "div-principal", "Cadastro", "SorteiosTabela")' class="nav-link">
+                                <i class="nav-icon fas fa-gift"></i>
+                                <p> Sorteios</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="javascript:void(0);" @onclick='() => ChamarJS("FazerLogout", "Auth", "Logout")' class="nav-link">
+                        <i class="nav-icon fas fa-door-open"></i>
+                        <p> Sair </p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>
+
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Inicializa os plugins do AdminLTE após a renderização do Blazor
+            await JS.InvokeVoidAsync("blazorInterop.inicializarAdminLTE");
+        }
+    }
+
+    private async Task ChamarJS(string funcao, params object[] parametros)
+    {
+        await JS.InvokeVoidAsync("blazorInterop.executarFuncaoGlobal", funcao, parametros);
+    }
+}

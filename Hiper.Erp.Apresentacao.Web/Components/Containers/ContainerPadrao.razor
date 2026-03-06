@@ -1,0 +1,18 @@
+﻿<div class="@GetContainerClass() @Class" @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public bool Fluid { get; set; }
+    [Parameter] public string Breakpoint { get; set; } // sm, md, lg, xl, xxl
+    [Parameter] public string Class { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
+
+    private string GetContainerClass()
+    {
+        if (Fluid) return "container-fluid";
+        if (!string.IsNullOrEmpty(Breakpoint)) return $"container-{Breakpoint}";
+        return "container";
+    }
+}

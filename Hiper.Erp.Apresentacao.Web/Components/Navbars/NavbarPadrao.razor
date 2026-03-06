@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-@Expand @(Dark ? "navbar-dark bg-dark" : "navbar-light bg-light") @Class" @attributes="AdditionalAttributes">
+  <div class="container-fluid">
+    @if (!string.IsNullOrEmpty(BrandText))
+    {
+        <a class="navbar-brand" href="@BrandHref">@BrandText</a>
+    }
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#@_id" aria-controls="@_id" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="@_id">
+      <ul class="navbar-nav me-auto mb-2 mb-@Expand-0">
+        @ChildContent
+      </ul>
+    </div>
+  </div>
+</nav>
+
+@code {
+    [Parameter] public string BrandText { get; set; }
+    [Parameter] public string BrandHref { get; set; } = "/";
+    [Parameter] public string Expand { get; set; } = "lg";
+    [Parameter] public bool Dark { get; set; }
+    [Parameter] public string Class { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
+
+    private string _id = $"navbar-{Guid.NewGuid().ToString("N")}";
+}

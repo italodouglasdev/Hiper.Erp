@@ -1,0 +1,24 @@
+﻿<a class="dropdown-item"
+   href="@Href"
+   @onclick="OnClickHandler">
+
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <i class="@Icon"></i>
+    }
+
+    @ChildContent
+</a>
+
+@code {
+    [Parameter] public string Icon { get; set; }
+    [Parameter] public string Href { get; set; } = "#";
+    [Parameter] public EventCallback OnClick { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    private async Task OnClickHandler()
+    {
+        if (OnClick.HasDelegate)
+            await OnClick.InvokeAsync();
+    }
+}

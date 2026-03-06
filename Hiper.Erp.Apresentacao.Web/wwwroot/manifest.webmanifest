@@ -1,6 +1,6 @@
 {
-  "name": "Hiper.Erp.Apresentacao.Web",
-  "short_name": "Hiper.Erp.Apresentacao.Web",
+  "name": "idSaas.Erp.InterfaceUsuarios.RetaguardaWeb",
+  "short_name": "idSaas.Erp.InterfaceUsuarios.RetaguardaWeb",
   "id": "./",
   "start_url": "./",
   "display": "standalone",

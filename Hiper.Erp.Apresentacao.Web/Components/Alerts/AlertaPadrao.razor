@@ -1,0 +1,26 @@
+@if (Visible)
+{
+    <div class="alert alert-@Variant @(Dismissible ? "alert-dismissible fade show" : "") @Class" role="alert" @attributes="AdditionalAttributes">
+        @ChildContent
+        @if (Dismissible)
+        {
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" @onclick="OnDismiss"></button>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public string Variant { get; set; } = "primary";
+    [Parameter] public bool Dismissible { get; set; }
+    [Parameter] public string Class { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public bool Visible { get; set; } = true;
+    [Parameter] public EventCallback OnDismissed { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
+
+    private async Task OnDismiss()
+    {
+        Visible = false;
+        await OnDismissed.InvokeAsync();
+    }
+}

@@ -27,8 +27,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Configurações de Infraestrutura Base
@@ -54,7 +52,7 @@ builder.Services.AddScoped<RetaguardaDbContext>(provider =>
         // Fallback para banco padrão ou erro controlado
         return FabricaConexoes.CriarContexto(
             Hiper.Erp.Dominio.Enumeradores.EnumTipoSgdb.SQLServer,
-             "Data Source=localhost;Initial Catalog=idSaasErpDb; User ID=SA; Password=Y5hAmR9cJNKmGeY;TrustServerCertificate=True;");
+             "Data Source=localhost;Initial Catalog=HiperErp_Loja_0001; User ID=SA; Password=Y5hAmR9cJNKmGeY;TrustServerCertificate=True;");
     }
 
     // Cria o contexto dinamicamente baseado no Tenant resolvido pelo Middleware
@@ -132,8 +130,6 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
-
-
 
 
 var app = builder.Build();

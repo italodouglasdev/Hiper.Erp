@@ -1,0 +1,32 @@
+@using Hiper.Erp.Aplicacao.Dtos.Agentes
+
+<div class="d-flex justify-content-center gap-1">
+    <button class="btn btn-md btn-default mr-1"
+            @onclick="() => OnEditar.InvokeAsync(Agente)" 
+            title="Editar">
+        <i class="fas fa-edit"></i>
+    </button>
+
+    @if (OnFuncoes.HasDelegate)
+    {
+        <button class="btn btn-md btn-default"
+                @onclick="() => OnFuncoes.InvokeAsync(Agente)" 
+                title="Mais Funções">
+            <i class="fas fa-wrench"></i>
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] 
+    public DtoAgente Agente { get; set; } = default!;
+    
+    [Parameter] 
+    public EventCallback<DtoAgente> OnEditar { get; set; }
+    
+    [Parameter] 
+    public EventCallback<DtoAgente> OnExcluir { get; set; }
+    
+    [Parameter] 
+    public EventCallback<DtoAgente> OnFuncoes { get; set; }
+}

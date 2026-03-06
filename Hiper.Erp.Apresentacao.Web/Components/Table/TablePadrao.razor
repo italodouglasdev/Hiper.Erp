@@ -1,0 +1,293 @@
+@typeparam TItem
+@using Hiper.Erp.Aplicacao.Dtos.Filtros
+@using Hiper.Erp.Aplicacao.Dtos.Tabelas
+@using Hiper.Erp.Dominio.Atributos
+@using System.Reflection
+@using Hiper.Erp.Apresentacao.Web.Components.Modals
+@using Hiper.Erp.Apresentacao.Web.Components.Paginations
+@using idSaas.Erp.Aplicacao.Dtos.Tabelas
+
+<style>
+    .table-responsive-custom {
+        overflow-x: auto;
+        position: relative;
+    }
+
+    .table-padrao {
+        width: 100%;
+        margin-bottom: 1rem;
+        vertical-align: top;
+        border-color: #dee2e6;
+    }
+
+    .col-acoes-header {
+        position: sticky;
+        right: 0;
+        background-color: #f4f6f9;
+        z-index: 3;
+        text-align: center;
+        width: 120px;
+        border-left: 1px solid #dee2e6;
+    }
+
+    .col-acoes-body {
+        position: sticky;
+        right: 0;
+        background-color: #f4f6f9;
+        text-align: center;
+        width: 120px;
+        border-left: 1px solid #dee2e6;
+    }
+
+    tr:hover .col-acoes-body {
+        background-color: #ececec !important;
+    }
+
+    .table-padrao thead th {
+        background-color: #f4f6f9;
+        border-bottom: 2px solid #dee2e6;
+        white-space: nowrap;
+        padding: 0.75rem;
+    }
+
+    .table-padrao tbody td {
+        padding: 0.75rem;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="table-responsive-custom">
+    <table class="table table-hover table-padrao m-0">
+        <thead>
+            <tr>
+                @foreach (var coluna in Colunas)
+                {
+                    <th>
+                        <div class="d-flex align-items-center">
+                            <span>@coluna.NomeColuna</span>
+                            @if (coluna.ExibirFiltro)
+                            {
+                                var temFiltro = FiltrosPorColuna.ContainsKey(coluna.NomePropriedade) && FiltrosPorColuna[coluna.NomePropriedade].Any();
+                                <button class="btn btn-sm @(temFiltro ? "btn-dark" : "btn-default") ml-1"
+                                        @onclick="() => AbrirFiltro(coluna)"
+                                        @onclick:stopPropagation="true"
+                                        title="Filtrar">
+                                    <i class="fas fa-filter"></i>
+                                </button>
+                            }
+                        </div>
+                    </th>
+                }
+
+                <th class="col-acoes-header">
+
+                    <div class="d-flex justify-content-center gap-1">
+                        <button class="btn btn-md btn-default mr-1"
+                                @onclick="() => OnAdicionar.InvokeAsync()"
+                                title="Adicionar">
+                            <i class="fas fa-plus me-2"></i>
+                        </button>
+
+                        <button class="btn btn-md btn-default"
+                                @onclick="AbrirFiltroAvancado"
+                                title="Filtros Avançados">
+                            <i class="fas fa-cog"></i>
+                        </button>
+
+                    </div>
+
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (ItensExibidos != null && ItensExibidos.Any())
+            {
+                foreach (var item in ItensExibidos)
+                {
+                    <tr @onclick="() => OnRowClick.InvokeAsync(item)" style="cursor: pointer;">
+                        @foreach (var coluna in Colunas)
+                        {
+                            <td>@GetValor(item, coluna.NomePropriedade)</td>
+                        }
+                        <td class="col-acoes-body" @onclick:stopPropagation="true">
+                            @if (ColunaAcoes != null)
+                            {
+                                @ColunaAcoes(item)
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="@(Colunas.Count + 1)" class="text-center text-muted p-5">
+                        <i class="fas fa-info-circle me-2"></i> Nenhum registro encontrado.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (TotalRegistros > 0)
+{
+    <div class="d-flex justify-content-between align-items-center p-3 border-top bg-light">
+
+        <div class="text-muted small">
+            Mostrando <b>@((PaginaAtual - 1) * ItensPorPagina + 1)</b> a <b>@(Math.Min(PaginaAtual * ItensPorPagina, TotalRegistros))</b> de <b>@TotalRegistros</b> registros
+        </div>
+
+        @if (TotalPaginas >= 1)
+        {
+            <PaginacaoPadrao CurrentPage="@PaginaAtual"
+                             TotalPages="@TotalPaginas"
+                             OnPageChanged="AlterarPagina" />
+        }
+    </div>
+}
+
+@if (ColunaSelecionada != null)
+{
+    <ModelFiltroDeTabela Coluna="ColunaSelecionada"
+                         FiltrosExistentes="@ObterFiltrosDaColuna(ColunaSelecionada.NomePropriedade)"
+                         OnAplicar="AplicarFiltros"
+                         OnFechar="FecharModal" />
+}
+
+@if (ExibirFiltroAvancado)
+{
+    <ModelFiltroAvancadosDeTabela Filtro="DtoFiltro"
+                                  Colunas="Colunas"
+                                  OnAplicar="AplicarFiltroAvancado"
+                                  OnFechar="FecharModal" />
+}
+
+@code {
+
+
+    protected override void OnInitialized()
+    {
+        Colunas = typeof(TItem)
+            .GetProperties()
+            .Select(p => new { Prop = p, Attr = p.GetCustomAttribute<ParametrosDeTabelaAttribute>() })
+            .Where(x => x.Attr?.ExibirColuna == true)
+            .Select(x => new TabelaColuna
+            {
+                NomePropriedade = x.Prop.Name,
+                NomeColuna = x.Attr?.NomeColuna ?? x.Prop.Name,
+                ExibirFiltro = x.Attr?.ExibirFiltros ?? false,
+                Tipo = x.Prop.PropertyType
+            }).ToList();
+    }
+
+    #region Propriedades
+
+    [Parameter] public IEnumerable<TItem>? Itens { get; set; }
+    [Parameter] public EventCallback<DtoFiltro> OnFiltrar { get; set; }
+    [Parameter] public RenderFragment<TItem>? ColunaAcoes { get; set; }
+    [Parameter] public EventCallback<TItem> OnRowClick { get; set; }
+    [Parameter] public EventCallback OnAdicionar { get; set; }
+
+    [Parameter] public int? TotalItensServidor { get; set; }
+    [Parameter] public int PaginaAtual { get; set; } = 1;
+    [Parameter] public int ItensPorPagina { get; set; } = 10;
+    [Parameter] public EventCallback<int> OnPaginaAlterada { get; set; }
+
+    private List<TabelaColuna> Colunas = new();
+    private TabelaColuna? ColunaSelecionada;
+    private bool ExibirFiltroAvancado = false;
+    private DtoFiltro DtoFiltro = new();
+    private Dictionary<string, List<FiltroCampo>> FiltrosPorColuna = new();
+
+    private IEnumerable<TItem>? ItensExibidos
+    {
+        get
+        {
+            if (Itens == null) return null;
+            if (!TotalItensServidor.HasValue)
+            {
+                return Itens.Skip((PaginaAtual - 1) * ItensPorPagina).Take(ItensPorPagina);
+            }
+            return Itens;
+        }
+    }
+
+    private int TotalRegistros => TotalItensServidor ?? (Itens?.Count() ?? 0);
+    private int TotalPaginas => (int)Math.Ceiling((double)TotalRegistros / (ItensPorPagina > 0 ? ItensPorPagina : 10));
+
+
+    #endregion
+
+
+
+
+
+
+    private void AbrirFiltro(TabelaColuna coluna)
+    {
+        ColunaSelecionada = coluna;
+    }
+
+    private void FecharModal()
+    {
+        ColunaSelecionada = null;
+        ExibirFiltroAvancado = false;
+    }
+
+    private void AbrirFiltroAvancado()
+    {
+        ExibirFiltroAvancado = true;
+    }
+
+    private async Task AplicarFiltroAvancado(DtoFiltro filtro)
+    {
+        DtoFiltro = filtro;
+        ItensPorPagina = filtro.Paginacao.QuantidadeItensPorPagina;
+        await AlterarPagina(1);
+        await OnFiltrar.InvokeAsync(DtoFiltro);
+        FecharModal();
+    }
+
+    private List<FiltroCampo> ObterFiltrosDaColuna(string prop)
+    {
+        if (!FiltrosPorColuna.ContainsKey(prop))
+        {
+            FiltrosPorColuna[prop] = new List<FiltroCampo>();
+        }
+        return FiltrosPorColuna[prop];
+    }
+
+    private async Task AplicarFiltros(DtoFiltroCampo campo)
+    {
+        DtoFiltro.Campos.RemoveAll(c => c.Nome == campo.Nome);
+        if (campo.Valores.Any())
+        {
+            DtoFiltro.Campos.Add(campo);
+        }
+
+        await AlterarPagina(1);
+        await OnFiltrar.InvokeAsync(DtoFiltro);
+        FecharModal();
+    }
+
+    private async Task AlterarPagina(int novaPagina)
+    {
+        PaginaAtual = novaPagina;
+        StateHasChanged();
+        if (OnPaginaAlterada.HasDelegate)
+        {
+            await OnPaginaAlterada.InvokeAsync(novaPagina);
+        }
+    }
+
+    private object? GetValor(object item, string prop)
+    {
+        var value = item.GetType().GetProperty(prop)?.GetValue(item);
+        if (value is bool b) return b ? "Sim" : "Não";
+        if (value is DateTime dt) return dt.ToString("dd/MM/yyyy");
+        return value;
+    }
+}

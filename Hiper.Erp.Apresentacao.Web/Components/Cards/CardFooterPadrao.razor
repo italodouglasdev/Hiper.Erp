@@ -1,0 +1,9 @@
+﻿<div class="card-footer @Class">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public string Class { get; set; }
+
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

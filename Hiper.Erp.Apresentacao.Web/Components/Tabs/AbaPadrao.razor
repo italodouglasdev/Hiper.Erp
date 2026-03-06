@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNetCore.Components
+
+@if (Ativa)
+{
+    <div class="tab-pane fade show active">
+        @ChildContent
+    </div>
+}
+
+@code {
+
+    [CascadingParameter]
+    internal TabPadrao Tab { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public string Id { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public string Titulo { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public string Icone { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    internal bool Ativa => Tab.AbaAtiva == Id;
+
+    protected override void OnInitialized()
+    {
+        Tab.RegistrarAba(this);
+    }
+}

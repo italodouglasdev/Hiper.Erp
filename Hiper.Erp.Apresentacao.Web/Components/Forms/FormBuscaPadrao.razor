@@ -1,0 +1,156 @@
+﻿@using Hiper.Erp.Aplicacao.Dtos.Filtros
+@using Hiper.Erp.Aplicacao.Dtos.Tabelas
+@using Hiper.Erp.Apresentacao.Web.Components.Accordions
+@using Hiper.Erp.Apresentacao.Web.Components.Buttons
+@using Hiper.Erp.Apresentacao.Web.Components.Cards
+@using Hiper.Erp.Apresentacao.Web.Components.Containers
+@using Hiper.Erp.Apresentacao.Web.Components.DropDown
+@using Hiper.Erp.Apresentacao.Web.Components.Paginations
+@using Hiper.Erp.Apresentacao.Web.Components.Table
+
+@* Filtros *@
+
+<CardPadrao Class="@Class">
+
+    <CardHeaderPadrao Title="@Title" Subtitle="@Subtitle">
+
+    </CardHeaderPadrao>
+
+    <CardBodyPadrao>
+
+        <RowPadrao>
+
+            <ColPadrao Class="col-12 col-md-6">
+                <AccordionPadrao Id="accordion-parametros">
+                    <AccordionItem Title="Parâmetros" Icon="fas fa-cog" ParentId="accordion-parametros">
+                        <div class="row">
+                            <div class="col-12 col-md-4">
+                                <div class="form-group">
+                                    <label>Ordenação</label>
+                                    <select class="form-control select2">
+                                        <option>Código</option>
+                                        <option>Tipo de Pessoa</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="form-group">
+                                    <label>Organização</label>
+                                    <select class="form-control select2">
+                                        <option>Crescente</option>
+                                        <option selected>Decrescente</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="form-group">
+                                    <label>Itens por Página</label>
+                                    <select class="form-control select2">
+                                        <option>5</option>
+                                        <option selected>10</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <AccordionPadrao Id="accordion-campos">
+                                    <AccordionItem Title="Campos" Icon="fas fa-list-ul" ParentId="accordion-campos">
+                                        <div class="row">
+                                            <div class="col-12 d-flex flex-wrap">
+                                                <div class="custom-control custom-checkbox m-1">
+                                                    <input class="custom-control-input" type="checkbox" id="check-codigo">
+                                                    <label class="custom-control-label" for="check-codigo">Código</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </AccordionItem>
+                                </AccordionPadrao>
+                            </div>
+                        </div>
+                    </AccordionItem>
+                </AccordionPadrao>
+            </ColPadrao>
+
+            <ColPadrao Class="col-12 col-md-6">
+                <AccordionPadrao Id="accordion-filtros">
+                    <AccordionItem Title="Filtros" Icon="fas fa-filter" ParentId="accordion-filtros">
+                        <div id="filtros-Agentes">
+                        </div>
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-default float-right" onclick="CriarControleFiltro('filtros-Agentes');">
+                                <i class="fas fa-plus"></i> Novo Filtro
+                            </button>
+                        </div>
+                    </AccordionItem>
+                </AccordionPadrao>
+            </ColPadrao>
+
+        </RowPadrao>
+
+    </CardBodyPadrao>
+
+    <CardFooterPadrao>
+
+        <ButtonPadrao Class="float-right mx-1"> <i class="fas fa-bars"></i> <i class="fas fa-check"></i> Aplicar </ButtonPadrao>
+        <ButtonPadrao Class="float-right mx-1"> <i class="fas fa-plus"></i> <i class="fas fa-eraser"></i> Limpar </ButtonPadrao>
+
+        <div class="float-right">
+            <div class="input-group input-group-md mr-1" style="width: 250px; margin-top: .4px">
+
+                <input type="text" class="form-control float-right" placeholder="Buscar" id="tabela-Agentes-input-buscar">
+
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-default" onclick="CarregarGrid('tabela-grid-Agentes', 'Cadastro', 'AgentesGrid', 'Agentes');"><i class="fas fa-search"></i></button>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </CardFooterPadrao>
+
+</CardPadrao>
+
+
+@* Tabela *@
+
+<CardPadrao>
+
+    <CardHeaderPadrao>
+
+        <DropDownPadrao Title="Exportar" Icon="fas fa-file-export" Class="float-right">
+            <DropDownItem Icon="fas fa-file-pdf"> PDF </DropDownItem>
+            <DropDownItem Icon="fas fa-file-excel"> EXCEL </DropDownItem>
+            <DropDownItem Icon="fas fa-file-alt"> TXT </DropDownItem>
+        </DropDownPadrao>
+
+        <ButtonPadrao Class="float-right mx-1"> <i class="fas fa-bars"></i> Funções </ButtonPadrao>
+        <ButtonPadrao Class="float-right mx-1"> <i class="fas fa-plus"></i> Novo </ButtonPadrao>
+
+    </CardHeaderPadrao>
+
+    <CardBodyPadrao Class="table-responsive p-0">
+               
+
+    </CardBodyPadrao>
+
+    <CardFooterPadrao>       
+
+    </CardFooterPadrao>
+
+</CardPadrao>
+
+
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Subtitle { get; set; }
+    [Parameter] public string Class { get; set; }
+      
+
+}
+
+

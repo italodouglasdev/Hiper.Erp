@@ -1,0 +1,11 @@
+﻿
+<ContainerPadrao Fluid Class="@Class">
+    <RowPadrao Class="g-3">
+        @ChildContent
+    </RowPadrao>
+</ContainerPadrao>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string Class { get; set; }
+}

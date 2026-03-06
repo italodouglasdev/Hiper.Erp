@@ -1,0 +1,107 @@
+@using Hiper.Erp.Aplicacao.Dtos.Tabelas
+@using Hiper.Erp.Aplicacao.Dtos.Filtros
+@using Hiper.Erp.Apresentacao.Web.Components.Accordions
+
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Filtros Avançados</h5>
+                <button type="button" class="btn btn-sm btn-default" @onclick="Fechar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <AccordionPadrao>
+                    <AccordionItem Title="Configurações de Exibição" Icon="fas fa-cog" Expanded="true">
+                        <div class="row">
+                            <div class="col-12 col-md-4">
+                                <div class="form-group">
+                                    <label>Ordenação</label>
+                                    <select class="form-control select2" @bind="Filtro.Paginacao.Ordenacao">
+                                        @foreach (var coluna in Colunas)
+                                        {
+                                            <option value="@coluna.NomePropriedade">@coluna.NomeColuna</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="form-group">
+                                    <label>Organização</label>
+                                    <select class="form-control select2" @bind="Filtro.Paginacao.Organizacao">
+                                        <option value="ASC">Crescente</option>
+                                        <option value="DESC">Decrescente</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="form-group">
+                                    <label>Itens por Página</label>
+                                    <select class="form-control select2" @bind="Filtro.Paginacao.QuantidadeItensPorPagina">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <AccordionPadrao Id="accordion-campos">
+                                    <AccordionItem Title="Campos" Icon="fas fa-list-ul" ParentId="accordion-campos" Expanded="true">
+                                        <div class="row">
+                                            <div class="col-12 d-flex flex-wrap">
+                                                @foreach (var coluna in Colunas)
+                                                {
+                                                    <div class="custom-control custom-checkbox m-1">
+                                                        <input class="custom-control-input" type="checkbox" id="check-@coluna.NomePropriedade" 
+                                                               checked="@coluna.ExibirColuna" 
+                                                               @onchange="(e) => ToggleColuna(coluna, e)">
+                                                        <label class="custom-control-label" for="check-@coluna.NomePropriedade">@coluna.NomeColuna</label>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </AccordionItem>
+                                </AccordionPadrao>
+                            </div>
+                        </div>
+                    </AccordionItem>
+                </AccordionPadrao>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-md btn-default" @onclick="Fechar">Cancelar</button>
+                <button class="btn btn-md btn-default" @onclick="Aplicar">Aplicar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public DtoFiltro Filtro { get; set; } = new();
+    [Parameter] public List<TabelaColuna> Colunas { get; set; } = new();
+    [Parameter] public EventCallback<DtoFiltro> OnAplicar { get; set; }
+    [Parameter] public EventCallback OnFechar { get; set; }
+
+    private void ToggleColuna(TabelaColuna coluna, ChangeEventArgs e)
+    {
+        if (e.Value is bool checkedValue)
+        {
+            coluna.ExibirColuna = checkedValue;
+        }
+    }
+
+    private async Task Aplicar()
+    {
+        await OnAplicar.InvokeAsync(Filtro);
+        await Fechar();
+    }
+
+    private async Task Fechar()
+    {
+        await OnFechar.InvokeAsync();
+    }
+}

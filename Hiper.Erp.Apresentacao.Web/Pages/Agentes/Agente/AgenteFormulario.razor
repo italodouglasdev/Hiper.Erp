@@ -1,0 +1,69 @@
+@using Hiper.Erp.Aplicacao.Dtos.Agentes
+@using Hiper.Erp.Apresentacao.Web.Components.Buttons
+@using Hiper.Erp.Apresentacao.Web.Components.Containers
+@using Hiper.Erp.Apresentacao.Web.Components.Inputs
+@using Hiper.Erp.Apresentacao.Web.Components.Tabs
+
+<EditForm Model="Agente">
+    <TabPadrao>
+        <AbaPadrao Id="geral" Titulo="Geral" Icone="fas fa-th-large">
+            <div class="p-3">
+                <RowPadrao>
+                    <div class="col-12 mb-3 border-bottom pb-2">
+                        <h6 class="text-muted"><i class="fas fa-tags me-2"></i> Categorias</h6>
+                        <div class="d-flex flex-wrap gap-3">
+                            <InputSwitchPadrao Label="Cliente" @bind-Value="Agente.AgenteCliente" />                           
+                            <InputSwitchPadrao Label="Colaborador" @bind-Value="Agente.AgenteColaborador" />                         
+                        </div>
+                    </div>
+                </RowPadrao>
+
+                <RowPadrao>
+                    <InputIntPadrao FormGroupClass="col-12 col-md-2" Label="Código" Disabled @bind-Value="Agente.Codigo" />
+                    <InputSelectSinglePadrao FormGroupClass="col-12 col-md-3" Label="Tipo Pessoa" @bind-Value="Agente.Tipo">
+                        <option value="">Selecione...</option>
+                        <option value="PJ">Pessoa Jurídica</option>
+                        <option value="PF">Pessoa Física</option>
+                    </InputSelectSinglePadrao>
+                    <InputTextPadrao FormGroupClass="col-12 col-md-4" Label="CNPJ/CPF" @bind-Value="Agente.CnpjCpf" Placeholder="00.000.000/0000-00" />
+                    <div class="col-12 col-md-3 d-flex align-items-end mb-3">
+                        <InputSwitchPadrao Label="Ativo" @bind-Value="Agente.Ativo" />
+                    </div>
+                </RowPadrao>
+          
+                <RowPadrao>
+                    <InputTextPadrao FormGroupClass="col-12 col-md-6" Label="Razão Social / Nome" @bind-Value="Agente.RazaoNome" />
+                    <InputTextPadrao FormGroupClass="col-12 col-md-6" Label="Nome Fantasia / Apelido" @bind-Value="Agente.FantasiaApelido" />
+                </RowPadrao>
+                
+                <RowPadrao>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="form-label">Observações</label>
+                            <InputTextArea class="form-control" @bind-Value="Agente.Observacao" rows="3" />
+                        </div>
+                    </div>
+                </RowPadrao>
+            </div>
+        </AbaPadrao>
+
+        <AbaPadrao Id="contatos" Titulo="Contatos" Icone="fas fa-address-book">
+            <div class="p-4 text-center text-muted">
+                <i class="fas fa-hard-hat fa-3x mb-3"></i>
+                <p>Módulo de contatos em desenvolvimento.</p>
+            </div>
+        </AbaPadrao>
+
+        <AbaPadrao Id="enderecos" Titulo="Endereços" Icone="fas fa-map-marker-alt">
+            <div class="p-4 text-center text-muted">
+                <i class="fas fa-hard-hat fa-3x mb-3"></i>
+                <p>Módulo de endereços em desenvolvimento.</p>
+            </div>
+        </AbaPadrao>
+    </TabPadrao>
+</EditForm>
+
+@code {
+    [Parameter, EditorRequired]
+    public DtoAgente Agente { get; set; } = new();
+}

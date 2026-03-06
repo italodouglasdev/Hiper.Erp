@@ -1,0 +1,55 @@
+<ul class="pagination m-0 float-right @(Size != "md" ? $"pagination-{Size}" : "") @Class"
+    @attributes="AdditionalAttributes">
+
+    <li class="page-item @(CurrentPage == 1 ? "disabled" : "")">
+        <button type="button"
+                class="btn btn-md btn-default"
+                disabled="@(CurrentPage == 1)"
+                @onclick="() => OnPageClick(CurrentPage - 1)">
+            <i class="fas fa-chevron-left me-1"></i>
+            <i class="fas fa-chevron-left me-1"></i>
+        </button>
+    </li>
+
+    @for (int i = 1; i <= TotalPages; i++)
+    {
+        var pageNumber = i;
+
+        <li class="page-item @(CurrentPage == pageNumber ? "active" : "")">
+            <button type="button"
+                    class="btn btn-md btn-default @(CurrentPage == pageNumber ? "active" : "")"
+                    disabled="@(CurrentPage == pageNumber)"
+                    @onclick="() => OnPageClick(pageNumber)">
+                @pageNumber
+            </button>
+        </li>
+    }
+
+    <li class="page-item @(CurrentPage == TotalPages ? "disabled" : "")">
+        <button type="button"
+                class="btn btn-md btn-default"
+                disabled="@(CurrentPage == TotalPages)"
+                @onclick="() => OnPageClick(CurrentPage + 1)">
+            <i class="fas fa-chevron-right ms-1"></i>
+            <i class="fas fa-chevron-right ms-1"></i>
+        </button>
+    </li>
+
+</ul>
+
+@code {
+    [Parameter] public int CurrentPage { get; set; } = 1;
+    [Parameter] public int TotalPages { get; set; } = 1;
+    [Parameter] public string Size { get; set; } = "md"; // sm, md, lg
+    [Parameter] public string Class { get; set; }
+    [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
+
+    private async Task OnPageClick(int page)
+    {
+        if (page >= 1 && page <= TotalPages && page != CurrentPage)
+        {
+            await OnPageChanged.InvokeAsync(page);
+        }
+    }
+}

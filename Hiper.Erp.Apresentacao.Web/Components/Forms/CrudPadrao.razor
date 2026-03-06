@@ -1,0 +1,107 @@
+@typeparam TDto where TDto : class, new()
+@using Hiper.Erp.Aplicacao.Dtos.Filtros
+@using Hiper.Erp.Apresentacao.Web.Components.Buttons
+@using Hiper.Erp.Apresentacao.Web.Components.Cards
+@using Hiper.Erp.Apresentacao.Web.Components.Containers
+@using Hiper.Erp.Apresentacao.Web.Components.Table
+@using Hiper.Erp.Apresentacao.Web.Components.Modals
+
+<ContainerPadrao>
+    <RowPadrao>
+        <ColPadrao>
+            <CardPadrao>
+                <CardHeaderPadrao>
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <h3 class="card-title">@Titulo</h3>
+                        <ButtonPadrao Class="btn-primary" OnClick="NovoRegistro">
+                            <i class="fas fa-plus me-2"></i> @TextoBotaoNovo
+                        </ButtonPadrao>
+                    </div>
+                </CardHeaderPadrao>
+                <CardBodyPadrao Class="p-0">
+                    <TablePadrao TItem="TDto"
+                                 Itens="@Itens"
+                                 ItensPorPagina="@ItensPorPagina"
+                                 OnPaginaAlterada="OnPaginaAlterada"
+                                 OnFiltrar="OnFiltrar"
+                                 OnRowClick="Editar">
+                        <ColunaAcoes Context="item">
+                            @if (ColunaAcoes != null)
+                            {
+                                @ColunaAcoes(item)
+                            }
+                        </ColunaAcoes>
+                    </TablePadrao>
+                </CardBodyPadrao>
+            </CardPadrao>
+        </ColPadrao>
+    </RowPadrao>
+</ContainerPadrao>
+
+<ModalPadrao Title="@(ItemSelecionado == null ? "Novo Registro" : "Editar Registro")"
+             Visible="@ExibirModal"
+             OnClose="FecharModal"
+             Size="@ModalSize"
+             Centered="true">
+    <ChildContent>
+        @if (Formulario != null)
+        {
+            @Formulario(ItemAtual)
+        }
+    </ChildContent>
+    <FooterContent>
+        <ButtonPadrao Class="btn-secondary" OnClick="FecharModal">
+            <i class="fas fa-times me-2"></i> Cancelar
+        </ButtonPadrao>
+        <ButtonPadrao Class="btn-primary" OnClick="SalvarInterno">
+            <i class="fas fa-save me-2"></i> Salvar
+        </ButtonPadrao>
+    </FooterContent>
+</ModalPadrao>
+
+@code {
+    [Parameter] public string Titulo { get; set; } = "Consulta";
+    [Parameter] public string TextoBotaoNovo { get; set; } = "Novo";
+    [Parameter] public IEnumerable<TDto>? Itens { get; set; }
+    [Parameter] public int ItensPorPagina { get; set; } = 10;
+    [Parameter] public string ModalSize { get; set; } = "xl";
+
+    [Parameter] public RenderFragment<TDto>? ColunaAcoes { get; set; }
+    [Parameter] public RenderFragment<TDto>? Formulario { get; set; }
+
+    [Parameter] public EventCallback<int> OnPaginaAlterada { get; set; }
+    [Parameter] public EventCallback<DtoFiltro> OnFiltrar { get; set; }
+    [Parameter] public EventCallback<TDto> OnSalvar { get; set; }
+    [Parameter] public EventCallback OnNovo { get; set; }
+
+    private bool ExibirModal { get; set; }
+    private TDto? ItemSelecionado { get; set; }
+    private TDto ItemAtual { get; set; } = new();
+
+    private void NovoRegistro()
+    {
+        ItemSelecionado = null;
+        ItemAtual = new TDto();
+        ExibirModal = true;
+        OnNovo.InvokeAsync();
+    }
+
+    private void Editar(TDto item)
+    {
+        ItemSelecionado = item;
+        // Criar uma cópia simples para edição (pode precisar de reflexão ou mapeador para cópia profunda)
+        ItemAtual = item; 
+        ExibirModal = true;
+    }
+
+    private async Task SalvarInterno()
+    {
+        await OnSalvar.InvokeAsync(ItemAtual);
+        ExibirModal = false;
+    }
+
+    private void FecharModal()
+    {
+        ExibirModal = false;
+    }
+}

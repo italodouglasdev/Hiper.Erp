@@ -1,0 +1,81 @@
+﻿@inject idSaas.Erp.InterfaceUsuarios.RetaguardaWeb.Servicos.ModalServico Modal
+
+<div class="modal fade @Class" id="@Id" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog @_classeTamanho">
+        <div class="modal-content">
+  
+            <div class="modal-header">
+                <h5 class="modal-title">@Titulo</h5>
+
+                <div class="ms-auto d-flex gap-1 align-items-center">
+               
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuTamanho" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuTamanho">
+                            <li><h6 class="dropdown-header">Tamanho da Janela</h6></li>
+                            <li>
+                                <button class="dropdown-item @(ObterClasseAtiva(""))" @onclick='() => MudarTamanho("")'>
+                                    <i class="fa fa-tablet me-2"></i> Médio (Padrão)
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item @(ObterClasseAtiva("modal-lg"))" @onclick='() => MudarTamanho("modal-lg")'>
+                                    <i class="fa fa-desktop me-2"></i> Grande (LG)
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item @(ObterClasseAtiva("modal-xl"))" @onclick='() => MudarTamanho("modal-xl")'>
+                                    <i class="fa fa-expand me-2"></i> Extra Grande (XL)
+                                </button>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <button class="dropdown-item @(ObterClasseAtiva("modal-fullscreen"))" @onclick='() => MudarTamanho("modal-fullscreen")'>
+                                    <i class="fa fa-arrows-alt me-2"></i> Tela Cheia
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="vr mx-2"></div>
+
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="FecharModal"></button>
+                </div>
+            </div>
+
+            <div class="modal-body mt-1">
+                @ChildContent
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter] public string IdBase { get; set; }
+    [Parameter] public string Titulo { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    [Parameter] public string Class { get; set; }
+
+    public string Id => $"model-{IdBase}";
+    private string _classeTamanho = "modal-lg";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) await Modal.Abrir(Id);
+    }
+
+    private void MudarTamanho(string novaClasse) => _classeTamanho = novaClasse;
+
+    private string ObterClasseAtiva(string classeVerificar)
+    {
+        // "active" é a classe padrão do Bootstrap para itens de dropdown selecionados
+        return _classeTamanho == classeVerificar ? "active" : "";
+    }
+
+    private async Task FecharModal() => await Modal.Fechar(Id);
+}

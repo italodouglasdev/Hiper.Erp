@@ -1,0 +1,11 @@
+<span class="badge @(Pill ? "rounded-pill" : "") bg-@Variant @Class" @attributes="AdditionalAttributes">
+    @ChildContent
+</span>
+
+@code {
+    [Parameter] public string Variant { get; set; } = "primary";
+    [Parameter] public bool Pill { get; set; }
+    [Parameter] public string Class { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
+}

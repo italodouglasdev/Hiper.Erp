@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Components
+
+
+@* <style>
+    .nav-tabs .nav-link {
+        border-radius: 0;
+        color: #495057;
+    }
+
+        .nav-tabs .nav-link.active {
+            background-color: #e9ecef;
+            border-color: #dee2e6 #dee2e6 #fff;
+            color: #212529;
+            font-weight: 500;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background-color: #f1f3f5;
+        }
+</style> *@
+
+
+<CascadingValue Value="this">
+    <ul class="nav nav-tabs">
+        @foreach (var aba in Abas)
+        {
+            <li class="nav-item">
+                <button type="button"
+                        class="nav-link @(AbaAtiva == aba.Id ? "active" : "")"
+                        @onclick="() => Ativar(aba.Id)">
+                    <i class="@aba.Icone me-1"></i>
+                    @aba.Titulo
+                </button>
+            </li>
+        }
+    </ul>
+
+    <div class="tab-content p-3 border-0 rounded-bottom">
+        @ChildContent
+    </div>
+</CascadingValue>
+
+@code {
+
+    internal string? AbaAtiva { get; set; }
+
+    internal List<AbaPadrao> Abas { get; } = new();
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    internal void RegistrarAba(AbaPadrao aba)
+    {
+        Abas.Add(aba);
+
+        // primeira aba vira ativa automaticamente
+        AbaAtiva ??= aba.Id;
+
+        StateHasChanged();
+    }
+
+    internal void Ativar(string id)
+    {
+        AbaAtiva = id;
+    }
+}

@@ -1,0 +1,25 @@
+﻿
+
+<div class="card-header @Class" style="background-color: #f4f6f9">
+
+    @if (!string.IsNullOrEmpty(Title))
+    {
+        <h5 class="card-title">@Title</h5>
+    }
+    @if (!string.IsNullOrEmpty(Subtitle))
+    {
+        <h6 class="card-subtitle mb-2 text-body-secondary">@Subtitle</h6>
+    }
+
+    @ChildContent
+
+</div>
+
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Subtitle { get; set; }
+    [Parameter] public string Class { get; set; }
+
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}
