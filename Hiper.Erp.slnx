@@ -18,7 +18,6 @@
     <Project Path="Hiper.Erp.Infraestrutura.Bancos/Hiper.Erp.Infraestrutura.Bancos.csproj" />
     <Project Path="Hiper.Erp.Infraestrutura.Cache/Hiper.Erp.Infraestrutura.Cache.csproj" />
     <Project Path="Hiper.Erp.Infraestrutura.Migrations.Run/Hiper.Erp.Infraestrutura.Migrations.Run.csproj" />
-    <Project Path="Hiper.Erp.Infraestrutura.Migrations/Hiper.Erp.Infraestrutura.Migrations.csproj" />
     <Project Path="Hiper.Erp.Infraestrutura.Repositorios/Hiper.Erp.Infraestrutura.Repositorios.csproj" />
   </Folder>
   <Folder Name="/Testes/">
