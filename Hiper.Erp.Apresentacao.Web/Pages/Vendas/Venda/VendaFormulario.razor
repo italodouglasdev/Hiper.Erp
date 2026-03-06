@@ -1,0 +1,168 @@
+@using Hiper.Erp.Aplicacao.Dtos.Vendas
+@using Hiper.Erp.Aplicacao.Dtos.Agentes
+@using Hiper.Erp.Aplicacao.Dtos.FormasPagamentos
+@using Hiper.Erp.Aplicacao.Dtos.Produtos
+@using Hiper.Erp.Apresentacao.Web.Components.Buttons
+@using Hiper.Erp.Apresentacao.Web.Components.Containers
+@using Hiper.Erp.Apresentacao.Web.Components.Inputs
+@using Hiper.Erp.Apresentacao.Web.Components.Tabs
+@using Hiper.Erp.Apresentacao.Web.Components.Table
+@using Hiper.Erp.Apresentacao.Web.Components.Modals
+@inject IJSRuntime JS
+
+<EditForm Model="Venda">
+    <TabPadrao>
+        <AbaPadrao Id="geral" Titulo="Geral" Icone="fas fa-th-large">
+            <div class="p-3">
+                <RowPadrao>
+                    <InputIntPadrao FormGroupClass="col-12 col-md-2" Label="Código" Disabled @bind-Value="Venda.Codigo" />
+                    <InputSelectSinglePadrao FormGroupClass="col-12 col-md-5" Label="Cliente" @bind-Value="Venda.CodigoCliente">
+                        <option value="0">Selecione o cliente...</option>
+                        @foreach (var cliente in Clientes)
+                        {
+                            <option value="@cliente.Codigo">@cliente.RazaoNome</option>
+                        }
+                    </InputSelectSinglePadrao>
+                    <InputSelectSinglePadrao FormGroupClass="col-12 col-md-5" Label="Forma de Pagamento" @bind-Value="Venda.CodigoFormaPagamento">
+                        <option value="0">Selecione a forma de pagamento...</option>
+                        @foreach (var forma in FormasPagamento)
+                        {
+                            <option value="@forma.Codigo">@forma.Nome</option>
+                        }
+                    </InputSelectSinglePadrao>
+                </RowPadrao>
+                
+                <RowPadrao>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="form-label">Descrição</label>
+                            <InputTextArea class="form-control" @bind-Value="Venda.Descricao" rows="2" />
+                        </div>
+                    </div>
+                </RowPadrao>
+            </div>
+        </AbaPadrao>
+
+        <AbaPadrao Id="itens" Titulo="Itens da Venda" Icone="fas fa-list">
+            <div class="p-3">
+                <TablePadrao TItem="DtoVendaItem"
+                             Itens="@Itens"
+                             ItensPorPagina="5"
+                             OnAdicionar="NovoItem"
+                             ExibirFiltros="false">
+                    <ColunaAcoes Context="item">
+                        <VendaItemAcoes VendaItem="item"
+                                        OnEditar="EditarItem"
+                                        OnExcluir="ExcluirItem" />
+                    </ColunaAcoes>
+                </TablePadrao>
+            </div>
+        </AbaPadrao>
+    </TabPadrao>
+</EditForm>
+
+<ModalPadrao Title="@(itemVenda.Codigo == 0 && itemVenda.CodigoVenda == 0 ? "Novo Item" : "Editar Item")"
+             Visible="@exibirModalItem"
+             CloseOnBackdrop="false"
+             Size="md"
+             Centered="true">
+    <ChildContent>
+        <VendaItemFormulario VendaItem="itemVenda" Produtos="Produtos" />
+    </ChildContent>
+    <FooterContent>
+        <ButtonPadrao Class="btn-secondary" OnClick="FecharModalItem">
+            <i class="fas fa-times me-2"></i> Cancelar
+        </ButtonPadrao>
+        <ButtonPadrao Class="btn-primary" OnClick="SalvarItem">
+            <i class="fas fa-save me-2"></i> Confirmar Item
+        </ButtonPadrao>
+    </FooterContent>
+</ModalPadrao>
+
+@code {
+    [Parameter, EditorRequired]
+    public DtoVenda Venda { get; set; } = new();
+
+    [Parameter]
+    public List<DtoAgente> Clientes { get; set; } = new();
+
+    [Parameter]
+    public List<DtoFormaPagamento> FormasPagamento { get; set; } = new();
+
+    [Parameter]
+    public List<DtoProduto> Produtos { get; set; } = new();
+
+    [Parameter]
+    public List<DtoVendaItem> Itens { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<DtoVendaItem> OnAdicionarItem { get; set; }
+
+    [Parameter]
+    public EventCallback<DtoVendaItem> OnEditarItem { get; set; }
+
+    [Parameter]
+    public EventCallback<DtoVendaItem> OnExcluirItem { get; set; }
+
+    private DtoVendaItem itemVenda = new();
+    private bool exibirModalItem = false;
+
+    private void NovoItem()
+    {
+        itemVenda = new DtoVendaItem { CodigoVenda = Venda.Codigo };
+        exibirModalItem = true;
+    }
+
+    private void EditarItem(DtoVendaItem item)
+    {
+        itemVenda = new DtoVendaItem
+        {
+            Codigo = item.Codigo,
+            CodigoVenda = item.CodigoVenda,
+            CodigoProduto = item.CodigoProduto,
+            NomeProduto = item.NomeProduto
+        };
+        exibirModalItem = true;
+    }
+
+    private async Task SalvarItem()
+    {
+        if (itemVenda.CodigoProduto == 0)
+        {
+            await JS.InvokeVoidAsync("MessageBoxResultado", false, "Selecione um produto.");
+            return;
+        }
+
+        // Preencher o nome do produto para exibição na tabela
+        var produto = Produtos.FirstOrDefault(p => p.Codigo == itemVenda.CodigoProduto);
+        if (produto != null)
+        {
+            itemVenda.NomeProduto = produto.Nome;
+        }
+
+        if (itemVenda.Codigo == 0 && !Itens.Any(i => i == itemVenda))
+        {
+            await OnAdicionarItem.InvokeAsync(itemVenda);
+        }
+        else
+        {
+            await OnEditarItem.InvokeAsync(itemVenda);
+        }
+        
+        exibirModalItem = false;
+    }
+
+    private async Task ExcluirItem(DtoVendaItem item)
+    {
+        var confirmado = await JS.InvokeAsync<bool>("MessageBoxConfirmacao", $"Deseja remover o item {item.NomeProduto}?");
+        if (confirmado)
+        {
+            await OnExcluirItem.InvokeAsync(item);
+        }
+    }
+
+    private void FecharModalItem()
+    {
+        exibirModalItem = false;
+    }
+}

@@ -1,0 +1,20 @@
+@using Hiper.Erp.Aplicacao.Dtos.FormasPagamentos
+
+<div class="d-flex justify-content-center gap-1">
+    <button class="btn btn-md btn-default mr-1"
+            @onclick="() => OnEditar.InvokeAsync(FormaPagamento)" 
+            title="Editar">
+        <i class="fas fa-edit"></i>
+    </button>
+</div>
+
+@code {
+    [Parameter, EditorRequired] 
+    public DtoFormaPagamento FormaPagamento { get; set; } = default!;
+    
+    [Parameter] 
+    public EventCallback<DtoFormaPagamento> OnEditar { get; set; }
+    
+    [Parameter] 
+    public EventCallback<DtoFormaPagamento> OnExcluir { get; set; }
+}

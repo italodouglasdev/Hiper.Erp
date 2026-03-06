@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="API\NovaPasta\**" />
+    <EmbeddedResource Remove="API\NovaPasta\**" />
+    <None Remove="API\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Banco\Agentes\RepositorioAgentesDb.cs" />
   </ItemGroup>
 

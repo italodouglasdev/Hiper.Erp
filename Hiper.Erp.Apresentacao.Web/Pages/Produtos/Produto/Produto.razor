@@ -1,0 +1,196 @@
+@page "/Produtos/Produto"
+
+@using Hiper.Erp.Aplicacao.Dtos.Produtos
+@using Hiper.Erp.Aplicacao.Dtos.Filtros
+@using Hiper.Erp.Aplicacao.Interfaces.Servicos
+@using Hiper.Erp.Aplicacao.Interfaces.Servicos.Produtos
+@using Hiper.Erp.Apresentacao.Web.Components.Accordions
+@using Hiper.Erp.Apresentacao.Web.Components.Buttons
+@using Hiper.Erp.Apresentacao.Web.Components.Cards
+@using Hiper.Erp.Apresentacao.Web.Components.Containers
+@using Hiper.Erp.Apresentacao.Web.Components.Table
+@using Hiper.Erp.Apresentacao.Web.Components.Modals
+@inject IServicoProdutos ApiServicoProdutos
+@inject IJSRuntime JS
+
+<ContainerPadrao Breakpoint="xxl">
+    <RowPadrao>
+        <ColPadrao>
+            <CardPadrao>
+
+                <CardHeaderPadrao Class="p-3">
+
+                    <AccordionPadrao Class="mb-0">
+                        <AccordionItem Title="@Titulo" Icon="nav-icon fas fa-box"> </AccordionItem>
+                    </AccordionPadrao>
+
+                </CardHeaderPadrao>
+
+                <CardBodyPadrao Class="p-0">
+
+                    <TablePadrao TItem="DtoProduto"
+                                 Itens="@listaProdutos"
+                                 ItensPorPagina="10"
+                                 OnPaginaAlterada="PaginaAlterada"
+                                 OnFiltrar="CarregarLista"
+                                 OnAdicionar="Novo"
+                                 OnRowClick="Editar">
+
+                        <ColunaAcoes Context="item">
+                            <ProdutoAcoes Produto="item"
+                                          OnEditar="Editar" />
+                        </ColunaAcoes>
+
+                    </TablePadrao>
+                </CardBodyPadrao>
+            </CardPadrao>
+        </ColPadrao>
+    </RowPadrao>
+</ContainerPadrao>
+
+<ModalPadrao Title="@(produto.Codigo == 0 ? "Novo" : "Editar")"
+             Visible="@exibirModal"
+             CloseOnBackdrop="false"
+             Size="xl"
+             Centered="true">
+    <ChildContent>
+        <ProdutoFormulario Produto="produto" />
+    </ChildContent>
+    <FooterContent>
+        @if (produto.Codigo > 0)
+        {
+            <ButtonPadrao Class="btn-secondary" OnClick="Excluir">
+                <i class="fas fa-trash me-2"></i> Excluir
+            </ButtonPadrao>
+        }
+
+        <ButtonPadrao Class="btn-secondary" OnClick="FecharModal">
+            <i class="fas fa-times me-2"></i> Cancelar
+        </ButtonPadrao>
+        <ButtonPadrao Class="btn-primary" OnClick="Salvar">
+            <i class="fas fa-save me-2"></i> Salvar
+        </ButtonPadrao>
+    </FooterContent>
+</ModalPadrao>
+
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarLista();
+    }
+
+    #region Propriedades
+
+    private DtoProduto produto = new();
+    private List<DtoProduto> listaProdutos = new();
+    private int paginaAtual = 1;
+    private string Titulo = "Consulta de Produtos";
+    private bool exibirModal = false;
+    private DtoFiltro filtroAtual = new();
+
+    #endregion
+
+    #region Paginacao
+
+    private async Task CarregarLista(DtoFiltro filtro = null)
+    {
+        filtroAtual = filtro;
+        paginaAtual = 1;
+
+        var response = new Aplicacao.Dtos.Wrappers.ResultadoOperacao<List<DtoProduto>>();
+
+        if (filtro?.Campos?.Count > 0)
+        {
+            response = await ApiServicoProdutos.ObtenhaListaComFiltros(filtro);
+        }
+        else
+        {
+            response = await ApiServicoProdutos.ObtenhaLista();
+        }
+
+        if (response.Sucesso)
+        {
+            listaProdutos = response.Dados ?? new();
+        }
+    }
+
+    private void PaginaAlterada(int novaPagina)
+    {
+        paginaAtual = novaPagina;
+    }
+
+    #endregion
+
+    #region CRUD
+
+    private void Novo()
+    {
+        produto = new DtoProduto { Ativo = true };
+        exibirModal = true;
+    }
+
+    private void Editar(DtoProduto item)
+    {
+        this.produto = new DtoProduto
+        {
+            Codigo = item.Codigo,
+            Nome = item.Nome,
+            Descricao = item.Descricao,
+            PrecoVenda = item.PrecoVenda,
+            Ativo = item.Ativo,
+            Observacao = item.Observacao
+        };
+        exibirModal = true;
+    }
+
+    private async Task Salvar()
+    {
+        var novo = produto.Codigo == 0;
+
+        var confirmado = await JS.InvokeAsync<bool>("MessageBoxConfirmacao",
+                                    novo == true ? $"Deseja realmente cadastrar o produto {produto.Nome}?" :
+                                                   $"Deseja realmente atualizar o produto {produto.Nome}?");
+
+        if (confirmado)
+        {
+            var response = novo == true ? await ApiServicoProdutos.Cadastrar(produto) : await ApiServicoProdutos.Atualizar(produto);
+
+            await JS.InvokeVoidAsync("MessageBoxResultado", response.Sucesso, response.Mensagem);
+
+            if (response.Sucesso)
+            {
+                exibirModal = false;
+                await CarregarLista();
+            }
+
+        }
+    }
+
+    private async Task Excluir()
+    {
+        var confirmado = await JS.InvokeAsync<bool>("MessageBoxConfirmacao",
+                                                   $"Deseja realmente excluir o produto {produto.Nome}?");
+
+        if (confirmado)
+        {
+            var response = await ApiServicoProdutos.Deletar(produto.Codigo);
+
+            await JS.InvokeVoidAsync("MessageBoxResultado", response.Sucesso, response.Mensagem);
+
+            if (response.Sucesso)
+            {
+                exibirModal = false;
+                await CarregarLista();
+            }
+        }
+    }
+
+    #endregion
+
+    private void FecharModal()
+    {
+        exibirModal = false;
+    }
+}

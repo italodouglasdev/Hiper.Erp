@@ -8,13 +8,13 @@ namespace Hiper.Erp.Aplicacao.Dtos.Produtos
         [ParametrosDeTabela(NomeColuna = "Código", ExibirColuna = true, ExibirFiltros = true)]
         public int Codigo { get; set; }
 
-        [ParametrosDeTabela(NomeColuna = "Nome", ExibirColuna = false, ExibirFiltros = true)]
+        [ParametrosDeTabela(NomeColuna = "Nome", ExibirColuna = true, ExibirFiltros = true)]
         public string? Nome { get; set; }
 
-        [ParametrosDeTabela(NomeColuna = "Descrição", ExibirColuna = false, ExibirFiltros = true)]
+        [ParametrosDeTabela(NomeColuna = "Descrição", ExibirColuna = true, ExibirFiltros = true)]
         public string? Descricao { get; set; }
 
-        [ParametrosDeTabela(NomeColuna = "Preço de Venda", ExibirColuna = false, ExibirFiltros = true)]
+        [ParametrosDeTabela(NomeColuna = "Preço de Venda", ExibirColuna = true, ExibirFiltros = true)]
         public decimal? PrecoVenda { get; set; }
 
         [ParametrosDeTabela(NomeColuna = "Ativo", ExibirColuna = true, ExibirFiltros = true)]

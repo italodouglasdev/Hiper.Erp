@@ -1,0 +1,25 @@
+@using Hiper.Erp.Aplicacao.Dtos.Vendas
+
+<div class="d-flex justify-content-center gap-1">
+    <button class="btn btn-sm btn-default mr-1"
+            @onclick="() => OnEditar.InvokeAsync(VendaItem)" 
+            title="Editar">
+        <i class="fas fa-edit"></i>
+    </button>
+    <button class="btn btn-sm btn-default"
+            @onclick="() => OnExcluir.InvokeAsync(VendaItem)" 
+            title="Excluir">
+        <i class="fas fa-trash text-danger"></i>
+    </button>
+</div>
+
+@code {
+    [Parameter, EditorRequired] 
+    public DtoVendaItem VendaItem { get; set; } = default!;
+    
+    [Parameter] 
+    public EventCallback<DtoVendaItem> OnEditar { get; set; }
+    
+    [Parameter] 
+    public EventCallback<DtoVendaItem> OnExcluir { get; set; }
+}

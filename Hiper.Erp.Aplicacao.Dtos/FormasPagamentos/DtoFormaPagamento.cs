@@ -8,7 +8,7 @@ namespace Hiper.Erp.Aplicacao.Dtos.FormasPagamentos
         [ParametrosDeTabela(NomeColuna = "Código", ExibirColuna = true, ExibirFiltros = true)]
         public int Codigo { get; set; }
 
-        [ParametrosDeTabela(NomeColuna = "Nome", ExibirColuna = false, ExibirFiltros = true)]
+        [ParametrosDeTabela(NomeColuna = "Nome", ExibirColuna = true, ExibirFiltros = true)]
         public string? Nome { get; set; }
 
         [ParametrosDeTabela(NomeColuna = "Descrição", ExibirColuna = false, ExibirFiltros = true)]

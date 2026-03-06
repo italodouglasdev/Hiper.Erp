@@ -10,7 +10,7 @@ namespace Hiper.Erp.Infraestrutura.Repositorios.API.Agentes
     public class RepositorioAgentesApi : RespositorioBase<EntidadeAgente>, IRepositorioAgentes
     {
 
-        private readonly string endpoint = "/api/agentes";
+        private readonly string endpoint = "/api/Agentes";
         private readonly RepositorioApi repositorioApi;
 
 

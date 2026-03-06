@@ -1,0 +1,23 @@
+@using Hiper.Erp.Aplicacao.Dtos.Vendas
+@using Hiper.Erp.Aplicacao.Dtos.Produtos
+@using Hiper.Erp.Apresentacao.Web.Components.Inputs
+
+<EditForm Model="VendaItem">
+    <RowPadrao>
+        <InputSelectSinglePadrao FormGroupClass="col-12" Label="Produto" @bind-Value="VendaItem.CodigoProduto">
+            <option value="0">Selecione o produto...</option>
+            @foreach (var produto in Produtos)
+            {
+                <option value="@produto.Codigo">@produto.Nome</option>
+            }
+        </InputSelectSinglePadrao>
+    </RowPadrao>
+</EditForm>
+
+@code {
+    [Parameter, EditorRequired]
+    public DtoVendaItem VendaItem { get; set; } = new();
+
+    [Parameter]
+    public List<DtoProduto> Produtos { get; set; } = new();
+}

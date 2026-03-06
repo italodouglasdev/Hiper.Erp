@@ -1,0 +1,40 @@
+@using Hiper.Erp.Aplicacao.Dtos.Produtos
+@using Hiper.Erp.Apresentacao.Web.Components.Buttons
+@using Hiper.Erp.Apresentacao.Web.Components.Containers
+@using Hiper.Erp.Apresentacao.Web.Components.Inputs
+@using Hiper.Erp.Apresentacao.Web.Components.Tabs
+
+<EditForm Model="Produto">
+    <TabPadrao>
+        <AbaPadrao Id="geral" Titulo="Geral" Icone="fas fa-th-large">
+            <div class="p-3">
+                <RowPadrao>
+                    <InputIntPadrao FormGroupClass="col-12 col-md-2" Label="Código" Disabled @bind-Value="Produto.Codigo" />
+                    <InputTextPadrao FormGroupClass="col-12 col-md-7" Label="Nome" @bind-Value="Produto.Nome" />
+                    <div class="col-12 col-md-3 d-flex align-items-end mb-3">
+                        <InputSwitchPadrao Label="Ativo" @bind-Value="Produto.Ativo" />
+                    </div>
+                </RowPadrao>
+                
+             @*    <RowPadrao>
+                    <InputMoneyPadrao FormGroupClass="col-12 col-md-4" Label="Preço de Venda" @bind-Value="Produto.PrecoVenda" />
+                    <InputTextPadrao FormGroupClass="col-12 col-md-8" Label="Descrição" @bind-Value="Produto.Descricao" />
+                </RowPadrao> *@
+          
+                <RowPadrao>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="form-label">Observação</label>
+                            <InputTextArea class="form-control" @bind-Value="Produto.Observacao" rows="3" />
+                        </div>
+                    </div>
+                </RowPadrao>
+            </div>
+        </AbaPadrao>
+    </TabPadrao>
+</EditForm>
+
+@code {
+    [Parameter, EditorRequired]
+    public DtoProduto Produto { get; set; } = new();
+}

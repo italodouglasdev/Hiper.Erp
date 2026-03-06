@@ -1,0 +1,20 @@
+@using Hiper.Erp.Aplicacao.Dtos.Produtos
+
+<div class="d-flex justify-content-center gap-1">
+    <button class="btn btn-md btn-default mr-1"
+            @onclick="() => OnEditar.InvokeAsync(Produto)" 
+            title="Editar">
+        <i class="fas fa-edit"></i>
+    </button>
+</div>
+
+@code {
+    [Parameter, EditorRequired] 
+    public DtoProduto Produto { get; set; } = default!;
+    
+    [Parameter] 
+    public EventCallback<DtoProduto> OnEditar { get; set; }
+    
+    [Parameter] 
+    public EventCallback<DtoProduto> OnExcluir { get; set; }
+}
