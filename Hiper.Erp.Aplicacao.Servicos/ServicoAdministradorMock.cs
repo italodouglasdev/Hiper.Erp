@@ -5,7 +5,6 @@ using Hiper.Erp.Dominio.Enumeradores;
 
 namespace Hiper.Erp.Aplicacao.Servicos
 {
-    // Mock para simular o Servidor de Administração
     public class ServicoAdministradorMock : IServicoAdministrador
     {
         public async Task<ResultadoOperacao<ConfiguracaoTenantDto>> ObtenhaConfiguracaoTenant(string tenantId)
@@ -15,12 +14,11 @@ namespace Hiper.Erp.Aplicacao.Servicos
             if (string.IsNullOrEmpty(tenantId))
                 return ResultadoOperacao<ConfiguracaoTenantDto>.Falha("TenantId não fornecido.");
 
-            // Mock de dados
             var config = new ConfiguracaoTenantDto
             {
                 ConnectionString = tenantId == "cliente_pg"
-                    ? "Host=localhost;Database=idsaaserpdb;User ID=postgres;Password=Y5hAmR9cJNKmGeY;SSL Mode=Disable;"
-                    : "Data Source=localhost;Initial Catalog=idSaasErpDb; User ID=SA; Password=Y5hAmR9cJNKmGeY;TrustServerCertificate=True;",
+                    ? "Host=localhost;Database=HiperErp_Loja_0002;User ID=postgres;Password=Y5hAmR9cJNKmGeY;SSL Mode=Disable;"
+                    : "Data Source=localhost;Initial Catalog=HiperErp_Loja_0001; User ID=SA; Password=Y5hAmR9cJNKmGeY;TrustServerCertificate=True;",
                 TipoSgdb = tenantId == "cliente_pg" ? EnumTipoSgdb.PostgreSQL : EnumTipoSgdb.SQLServer
             };
 

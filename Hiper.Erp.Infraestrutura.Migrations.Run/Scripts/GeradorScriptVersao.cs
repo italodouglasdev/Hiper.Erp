@@ -223,7 +223,25 @@ namespace Hiper.Erp.Infraestrutura.Migrations.Run.Scripts
 
             if (isKey)
             {
-                return $"{nomeColuna} {tipoSql} PRIMARY KEY IDENTITY(1,1)";
+                if (_context.Database.IsSqlServer())
+                {
+                    return $"{nomeColuna} {tipoSql} PRIMARY KEY IDENTITY(1,1)";
+                }
+                else if (_context.Database.IsNpgsql())
+                {
+                    // Para int, usar SERIAL
+                    if (tipoCSharp == typeof(int))
+                    {
+                        return $"{nomeColuna} SERIAL PRIMARY KEY";
+                    }
+                    // Para long, usar BIGSERIAL
+                    else if (tipoCSharp == typeof(long))
+                    {
+                        return $"{nomeColuna} BIGSERIAL PRIMARY KEY";
+                    }
+                    // Fallback para outros tipos de chave primária, se houver
+                    return $"{nomeColuna} {tipoSql} PRIMARY KEY";
+                }
             }
 
             // Verifica se tem valor padrão
@@ -259,34 +277,68 @@ namespace Hiper.Erp.Infraestrutura.Migrations.Run.Scripts
             if (!string.IsNullOrEmpty(tipoExplicito))
                 return tipoExplicito;
 
-            if (tipo == typeof(int))
-                return "INT";
-            if (tipo == typeof(long))
-                return "BIGINT";
-            if (tipo == typeof(short))
-                return "SMALLINT";
-            if (tipo == typeof(byte))
-                return "TINYINT";
-            if (tipo == typeof(bool))
-                return "BIT";
-            if (tipo == typeof(decimal))
-                return "DECIMAL(18,2)";
-            if (tipo == typeof(double))
-                return "FLOAT";
-            if (tipo == typeof(float))
-                return "REAL";
-            if (tipo == typeof(DateTime))
-                return "DATETIME";
-            if (tipo == typeof(TimeSpan))
-                return "TIME";
-            if (tipo == typeof(Guid))
-                return "UNIQUEIDENTIFIER";
-            if (tipo == typeof(string))
-                return "NVARCHAR(MAX)";
-            if (tipo == typeof(byte[]))
-                return "VARBINARY(MAX)";
+            // Verifica o tipo de banco de dados do contexto
+            if (_context.Database.IsSqlServer())
+            {
+                if (tipo == typeof(int))
+                    return "INT";
+                if (tipo == typeof(long))
+                    return "BIGINT";
+                if (tipo == typeof(short))
+                    return "SMALLINT";
+                if (tipo == typeof(byte))
+                    return "TINYINT";
+                if (tipo == typeof(bool))
+                    return "BIT";
+                if (tipo == typeof(decimal))
+                    return "DECIMAL(18,2)";
+                if (tipo == typeof(double))
+                    return "FLOAT";
+                if (tipo == typeof(float))
+                    return "REAL";
+                if (tipo == typeof(DateTime))
+                    return "DATETIME";
+                if (tipo == typeof(TimeSpan))
+                    return "TIME";
+                if (tipo == typeof(Guid))
+                    return "UNIQUEIDENTIFIER";
+                if (tipo == typeof(string))
+                    return "NVARCHAR(MAX)";
+                if (tipo == typeof(byte[]))
+                    return "VARBINARY(MAX)";
+            }
+            else if (_context.Database.IsNpgsql())
+            {
+                if (tipo == typeof(int))
+                    return "INTEGER";
+                if (tipo == typeof(long))
+                    return "BIGINT";
+                if (tipo == typeof(short))
+                    return "SMALLINT";
+                if (tipo == typeof(byte))
+                    return "SMALLINT"; // PostgreSQL não tem TINYINT, SMALLINT é o mais próximo
+                if (tipo == typeof(bool))
+                    return "BOOLEAN";
+                if (tipo == typeof(decimal))
+                    return "NUMERIC(18,2)";
+                if (tipo == typeof(double))
+                    return "DOUBLE PRECISION";
+                if (tipo == typeof(float))
+                    return "REAL";
+                if (tipo == typeof(DateTime))
+                    return "TIMESTAMP WITHOUT TIME ZONE";
+                if (tipo == typeof(TimeSpan))
+                    return "INTERVAL"; // Ou TIME, dependendo do uso específico
+                if (tipo == typeof(Guid))
+                    return "UUID";
+                if (tipo == typeof(string))
+                    return "TEXT"; // Equivalente a NVARCHAR(MAX) no PostgreSQL
+                if (tipo == typeof(byte[]))
+                    return "BYTEA";
+            }
 
-            return "NVARCHAR(MAX)";
+            // Fallback para tipos não mapeados ou caso o provedor não seja reconhecido
+            return "TEXT";
         }
 
         /// <summary>

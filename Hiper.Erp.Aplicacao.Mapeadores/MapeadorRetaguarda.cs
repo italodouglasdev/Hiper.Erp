@@ -14,11 +14,11 @@ namespace Hiper.Erp.Aplicacao.Mapeadores
     {
         public MapeadorRetaguarda()
         {
-            CreateMap<DtoAgente, EntidadeAgente>();
-            CreateMap<DtoProduto, EntidadeProduto>();
-            CreateMap<DtoFormaPagamento, EntidadeFormaPagamento>();
-            CreateMap<DtoVenda, EntidadeVenda>();
-            CreateMap<DtoVendaItem, EntidadeVendaItem>();
+            CreateMap<DtoAgente, EntidadeAgente>().ReverseMap();
+            CreateMap<DtoProduto, EntidadeProduto>().ReverseMap();
+            CreateMap<DtoFormaPagamento, EntidadeFormaPagamento>().ReverseMap();
+            CreateMap<DtoVenda, EntidadeVenda>().ReverseMap();
+            CreateMap<DtoVendaItem, EntidadeVendaItem>().ReverseMap();
         }
     }
 }
