@@ -1,22 +1,36 @@
 ﻿using Hiper.Erp.Aplicacao.Dtos.ServicosExternos;
 using Hiper.Erp.Aplicacao.Dtos.Wrappers;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.ServicosExternos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hiper.Erp.Aplicacao.Servicos.ServicosExternos
 {
-    public class ServicoHiperAdm : IServicoAdministrador
+    public class ServicoHiperAdm : ServicosBaseApiRest, IServicoAdministrador
     {
-        public Task<ResultadoOperacao<ConfiguracaoTenantDto>> ObtenhaConfiguracaoTenant(string tenantId)
+
+        private readonly ServicosBaseApiRest servicoApi;
+
+        public ServicoHiperAdm(HttpClient httpClient) : base(httpClient)
         {
+            servicoApi = new ServicosBaseApiRest(httpClient);
+        }
 
-            throw new NotImplementedException();
+        public async Task<ResultadoOperacao<ConfiguracaoTenantDto>> Login(string email, string senha)
+        {
+            var login = new LoginDto { Email = email, Password = senha };
 
+            return await servicoApi.PostAsync<LoginDto, ConfiguracaoTenantDto>($"api/Auth/Login", login);
+        }
+
+        public async Task<ResultadoOperacao<List<LojaDto>>> Lojas()
+        {
+            return await servicoApi.GetAsync<List<LojaDto>>($"api/Auth/Lojas");
+        }
+
+        public async Task<ResultadoOperacao<ConfiguracaoTenantDto>> ObtenhaConfiguracaoTenant(string tenantId)
+        {
+            return await servicoApi.GetAsync<ConfiguracaoTenantDto>($"api/Tenants/ObtenhaConfiguracaoTenantPorXTenantId/{tenantId}");
 
         }
+
     }
 }
