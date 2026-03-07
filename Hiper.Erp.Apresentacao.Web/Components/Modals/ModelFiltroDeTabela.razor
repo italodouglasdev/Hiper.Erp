@@ -2,81 +2,77 @@
 @using Hiper.Erp.Dominio.Enumeradores
 @using Hiper.Erp.Aplicacao.Dtos.Filtros
 @using Hiper.Erp.Apresentacao.Web.Components.Inputs
-@using idSaas.Erp.Aplicacao.Dtos.Tabelas
 
 @if (Coluna != null)
 {
-    @if (Coluna != null)
-    {
-        <div class="modal fade show d-block rounded-0 shadow-sm" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Filtros - @Coluna.NomeColuna</h5>
-                        <button type="button" class="btn btn-sm btn-default" @onclick="Fechar">
-                            <i class="fas fa-times-circle"></i>
-                        </button>
-                    </div>
+    <div class="modal fade show d-block rounded-0 shadow-sm" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Filtros - @Coluna.NomeColuna</h5>
+                    <button type="button" class="btn btn-sm btn-default" @onclick="Fechar">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                </div>
 
-                    <div class="modal-body">
+                <div class="modal-body">
 
-                        @foreach (var filtro in Filtros)
-                        {
-                            <div class="row mb-2 align-items-center">
+                    @foreach (var filtro in Filtros)
+                    {
+                        <div class="row mb-2 align-items-center">
 
+                            <InputSelectSinglePadrao FormGroupClass="col-12 col-md-5"
+                                                     Label="Tipo Filtro"
+                                                     @bind-Value="filtro.TipoFiltro">
 
-                                <InputSelectSinglePadrao FormGroupClass="col-12 col-md-5"
-                                                         Label="Tipo Filtro"
-                                                         @bind-Value="filtro.TipoFiltro">
+                                @foreach (var tipo in EnumTipoFiltroQueryExtensions.Listar())
+                                {
+                                    <option value="@tipo.Valor">@tipo.Descricao</option>
+                                }
 
-                                    @foreach (var tipo in EnumTipoFiltroQueryExtensions.Listar())
-                                    {
-                                        <option value="@tipo.Valor">@tipo.Descricao</option>
-                                    }
+                            </InputSelectSinglePadrao>
 
-                                </InputSelectSinglePadrao>
+                            <InputButtonPadrao FormGroupClass="col-12 col-md-7"
+                                               Label="Valor do filtro"
+                                               @bind-Value="filtro.Valor"
+                                               ButtonTitle="Remover filtro"
+                                               OnButtonClick="() => RemoverFiltro(filtro)">
 
-                                <InputButtonPadrao FormGroupClass="col-12 col-md-7"
-                                                   Label="Valor do filtro"
-                                                   @bind-Value="filtro.Valor"
-                                                   ButtonTitle="Remover filtro"
-                                                   OnButtonClick="() => RemoverFiltro(filtro)">
+                                <Icon>
+                                    <i class="fas fa-trash-alt"></i>
+                                </Icon>
 
-                                    <Icon>
-                                        <i class="fas fa-trash-alt"></i>
-                                    </Icon>
+                            </InputButtonPadrao>
 
-                                </InputButtonPadrao>
+                        </div>
+                    }
 
-                            </div>
-                        }
+                    <button class="btn btn-sm btn-default" @onclick="AdicionarFiltro">
+                        <i class="fas fa-plus"></i>
+                        Adicionar filtro
+                    </button>
 
-                        <button class="btn btn-sm btn-default" @onclick="AdicionarFiltro">
-                            <i class="fas fa-plus"></i>
-                            Adicionar filtro
-                        </button>
+                </div>
 
-                    </div>
+                <div class="modal-footer">
 
-                    <div class="modal-footer">
+                    <button class="btn btn-sm btn-default" @onclick="Resetar">
+                        <i class="fas fa-eraser me-1"></i>
+                        Limpar
+                    </button>
 
-                        <button class="btn btn-sm btn-default" @onclick="Resetar">
-                            <i class="fas fa-eraser me-1"></i>
-                            Limpar
-                        </button>
+                    <button class="btn btn-sm btn-default" @onclick="Aplicar">
+                        <i class="fas fa-check me-1"></i>
+                        Aplicar Filtros
+                    </button>
 
-                        <button class="btn btn-sm btn-default" @onclick="Aplicar">
-                            <i class="fas fa-check me-1"></i>
-                            Aplicar Filtros
-                        </button>
-
-                    </div>
                 </div>
             </div>
         </div>
-    }
-
+    </div>
 }
+
+
 
 @code {
     [Parameter] public TabelaColuna? Coluna { get; set; }

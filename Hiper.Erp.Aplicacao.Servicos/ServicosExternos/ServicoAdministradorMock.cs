@@ -3,7 +3,7 @@ using Hiper.Erp.Aplicacao.Dtos.Wrappers;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.ServicosExternos;
 using Hiper.Erp.Dominio.Enumeradores;
 
-namespace Hiper.Erp.Aplicacao.Servicos
+namespace Hiper.Erp.Aplicacao.Servicos.ServicosExternos
 {
     public class ServicoAdministradorMock : IServicoAdministrador
     {

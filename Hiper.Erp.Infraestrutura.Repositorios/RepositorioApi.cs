@@ -92,17 +92,13 @@ namespace Hiper.Erp.Infraestrutura.Repositorios
             }
         }
 
-        /// <summary>
-        /// Centraliza a leitura do ResponseHttp e o mapeamento de volta para a Entidade
-        /// </summary>
+
         private async Task<ResultadoOperacao<TEntidade>> ProcessarResposta<TEntidade, TDto>(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
-                // Se for BadRequest, o corpo da resposta geralmente contém os erros de validação
                 var stringErro = await response.Content.ReadAsStringAsync();
 
-                // Tenta ler o formato padrão de erro do ASP.NET Core ou o seu ResponseHttp
                 return ResultadoOperacao<TEntidade>.Falha($"Erro {response.StatusCode}: {stringErro}");
             }
 

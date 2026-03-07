@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace idSaas.Erp.InterfaceUsuarios.RetaguardaWeb.Servicos
+namespace Hiper.Erp.InterfaceUsuarios.RetaguardaWeb.Servicos
 {
     public class ModalServico
     {

@@ -12,11 +12,12 @@ using Hiper.Erp.Aplicacao.Servicos.FormasPagamentos;
 using Hiper.Erp.Aplicacao.Servicos.Produtos;
 using Hiper.Erp.Aplicacao.Servicos.Vendas;
 using Hiper.Erp.Apresentacao.Web;
+using Hiper.Erp.Apresentacao.Web.Handlers;
 using Hiper.Erp.Infraestrutura.Repositorios.API.Agentes;
 using Hiper.Erp.Infraestrutura.Repositorios.API.FormasPagamentos;
 using Hiper.Erp.Infraestrutura.Repositorios.API.Produtos;
 using Hiper.Erp.Infraestrutura.Repositorios.API.Vendas;
-using idSaas.Erp.InterfaceUsuarios.RetaguardaWeb.Servicos;
+using Hiper.Erp.InterfaceUsuarios.RetaguardaWeb.Servicos;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -26,6 +27,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped<ModalServico>();
+builder.Services.AddTransient<TenantHandler>();
 
 builder.Services.AddAutoMapper(typeof(MapeadorRetaguarda));
 
@@ -41,9 +43,12 @@ builder.Services.AddScoped<IServicoProdutos, ServicoProdutos>();
 builder.Services.AddScoped<IServicoVendas, ServicoVendas>();
 builder.Services.AddScoped<IServicoVendasItens, ServicoVendasItens>();
 
-builder.Services.AddScoped(sp => new HttpClient
+builder.Services.AddHttpClient("HiperApi", client =>
 {
-    BaseAddress = new Uri("https://localhost:7126")
-});
+    client.BaseAddress = new Uri("https://localhost:7126");
+})
+.AddHttpMessageHandler<TenantHandler>();
+
+builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("HiperApi"));
 
 await builder.Build().RunAsync();

@@ -1,0 +1,55 @@
+﻿@page "/Auth/Login"
+
+@using Hiper.Erp.Apresentacao.Web.Components.Buttons
+@using Hiper.Erp.Apresentacao.Web.Components.Cards
+@using Hiper.Erp.Apresentacao.Web.Components.Containers
+@using Hiper.Erp.Apresentacao.Web.Components.Forms
+@using Hiper.Erp.Apresentacao.Web.Components.Inputs
+
+
+<ContainerPadrao Breakpoint="xxl" Class="hold-transition login-page">
+
+    <div class="login-box">
+
+        <div class="login-logo">
+            <a href="/"><b>Hiper</b> ERP</a>
+        </div>
+
+        <CardPadrao>
+
+            <CardBodyPadrao Class="login-card-body">
+
+                <p class="login-box-msg">Informe seu E-mail e Senha</p>
+
+                <FormPadrao>
+
+                    <RowPadrao>
+                        <InputTextLogin Placeholder="E-mail" Icon="fas fa-envelope" Type="email" />
+                        <InputPasswordLogin Placeholder="Senha" />
+                    </RowPadrao>
+
+                    <RowPadrao Class="mt-2">
+                        <ColPadrao>
+                            <ButtonPadrao Class="btn-block">
+                                Entrar <i class="fas fa-sign-in-alt"></i>
+                            </ButtonPadrao>
+                        </ColPadrao>
+                    </RowPadrao>
+
+                </FormPadrao>
+            </CardBodyPadrao>
+
+        </CardPadrao>
+
+    </div>
+
+    <footer class="text-center">
+
+        <p class="mt-3 mb-2">© Hiper - ERP @DateTime.Now.Year.ToString()</p>
+
+        <p> Desenvolvido por <a href="https://italodouglas.dev" target="_blank">italoDouglas.dev</a></p>
+
+    </footer>
+
+</ContainerPadrao>
+

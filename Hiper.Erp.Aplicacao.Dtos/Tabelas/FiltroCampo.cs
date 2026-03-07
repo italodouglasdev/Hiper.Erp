@@ -1,6 +1,6 @@
 ﻿using Hiper.Erp.Dominio.Enumeradores;
 
-namespace idSaas.Erp.Aplicacao.Dtos.Tabelas
+namespace Hiper.Erp.Aplicacao.Dtos.Tabelas
 {
     public class FiltroCampo
     {

@@ -1,6 +1,6 @@
 {
-  "name": "idSaas.Erp.InterfaceUsuarios.RetaguardaWeb",
-  "short_name": "idSaas.Erp.InterfaceUsuarios.RetaguardaWeb",
+  "name": "Hiper.Erp.InterfaceUsuarios.RetaguardaWeb",
+  "short_name": "Hiper.Erp.InterfaceUsuarios.RetaguardaWeb",
   "id": "./",
   "start_url": "./",
   "display": "standalone",
