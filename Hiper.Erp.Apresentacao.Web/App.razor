@@ -2,7 +2,7 @@
 
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        @if (string.IsNullOrEmpty(TenantHandler.JwtToken) && routeData.PageType != typeof(Hiper.Erp.Apresentacao.Web.Pages.Auth.Login))
+        @if (routeData.PageType != typeof(Hiper.Erp.Apresentacao.Web.Pages.Auth.Login))
         {
             <RedirectToLogin />
         }

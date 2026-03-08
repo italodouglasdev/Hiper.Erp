@@ -30,6 +30,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ModalServico>();
+builder.Services.AddScoped<StorageServico>();
 builder.Services.AddTransient<TenantHandler>();
 
 builder.Services.AddAutoMapper(typeof(MapeadorRetaguarda));

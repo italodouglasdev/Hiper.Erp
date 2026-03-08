@@ -1,13 +1,17 @@
 @page "/Auth/Login"
 @layout AuthLayout
 
+@using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Storages
 @using Hiper.Erp.Apresentacao.Web.Components.Inputs
 @using Hiper.Erp.Aplicacao.Interfaces.Servicos.ServicosExternos
 @using Hiper.Erp.Aplicacao.Dtos.ServicosExternos
 @using Hiper.Erp.Apresentacao.Web.Handlers
+@using Hiper.Erp.InterfaceUsuarios.RetaguardaWeb.Servicos
 
 @inject IServicoAdministrador ServicoAdmin
 @inject NavigationManager Navigation
+@inject StorageServico StorageServico
+
 
 <div class="login-box">
     <div class="login-logo">
@@ -102,7 +106,9 @@
                 var resultado = await ServicoAdmin.Login(Email, Senha);
                 if (resultado.Sucesso && resultado.Dados != null)
                 {
-                    TenantHandler.JwtToken = resultado.Dados.Token;
+                    //TenantHandler.JwtToken = resultado.Dados.Token;
+
+                    await StorageServico.SetItem(StorageKeys.Token, resultado.Dados.Token);
 
                     var resultadoLojas = await ServicoAdmin.Lojas();
                     if (resultadoLojas.Sucesso && resultadoLojas.Dados != null)
@@ -111,6 +117,7 @@
                         if (Lojas.Count == 1)
                         {
                             TenantIdSelecionado = Lojas[0].XTenantId.ToString();
+                            await StorageServico.SetItem(StorageKeys.Tenant, TenantIdSelecionado);
                             FinalizarLogin();
                         }
                     }
