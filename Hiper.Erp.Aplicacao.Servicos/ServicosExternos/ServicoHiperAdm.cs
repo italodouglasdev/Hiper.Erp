@@ -14,11 +14,11 @@ namespace Hiper.Erp.Aplicacao.Servicos.ServicosExternos
             servicoApi = new ServicosBaseApiRest(httpClient);
         }
 
-        public async Task<ResultadoOperacao<ConfiguracaoTenantDto>> Login(string email, string senha)
+        public async Task<ResultadoOperacao<UsuarioLogadoDto>> Login(string email, string senha)
         {
             var login = new LoginDto { Email = email, Password = senha };
 
-            return await servicoApi.PostAsync<LoginDto, ConfiguracaoTenantDto>($"api/Auth/Login", login);
+            return await servicoApi.PostAsync<LoginDto, UsuarioLogadoDto>($"api/Auth/Login", login);
         }
 
         public async Task<ResultadoOperacao<List<LojaDto>>> Lojas()

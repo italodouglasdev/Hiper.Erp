@@ -2,10 +2,12 @@ using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros;
 using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using Hiper.Erp.Aplicacao.Dtos.Produtos;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.Produtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hiper.Erp.Apresentacao.Api.Controllers.Produtos
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProdutosController : Controller

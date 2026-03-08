@@ -2,12 +2,13 @@
 using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros;
 using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.Agentes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hiper.Erp.Apresentacao.Api.Controllers.Agentes
 {
 
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AgentesController : Controller

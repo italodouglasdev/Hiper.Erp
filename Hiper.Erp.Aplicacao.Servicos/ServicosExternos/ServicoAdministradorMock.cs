@@ -7,6 +7,16 @@ namespace Hiper.Erp.Aplicacao.Servicos.ServicosExternos
 {
     public class ServicoAdministradorMock : IServicoAdministrador
     {
+        public Task<ResultadoOperacao<UsuarioLogadoDto>> Login(string email, string senha)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResultadoOperacao<List<LojaDto>>> Lojas()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ResultadoOperacao<ConfiguracaoTenantDto>> ObtenhaConfiguracaoTenant(string tenantId)
         {
             await Task.Delay(50); // Simula latência

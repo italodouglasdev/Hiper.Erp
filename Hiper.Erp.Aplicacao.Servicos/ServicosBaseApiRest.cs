@@ -105,7 +105,7 @@ namespace Hiper.Erp.Aplicacao.Servicos
                 return ResultadoOperacao<TDto>.Falha($"Erro {response.StatusCode}: {stringErro}");
             }
 
-            var resultado = await response.Content.ReadFromJsonAsync<ResponseHttp<TDto>>();
+                   var resultado = await response.Content.ReadFromJsonAsync<ResponseHttp<TDto>>();
 
             if (resultado == null)
                 return ResultadoOperacao<TDto>.Falha("Resposta inválida da API.");

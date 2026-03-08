@@ -1,12 +1,21 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+@using Hiper.Erp.Apresentacao.Web.Handlers
+
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        @if (string.IsNullOrEmpty(TenantHandler.JwtToken) && routeData.PageType != typeof(Hiper.Erp.Apresentacao.Web.Pages.Auth.Login))
+        {
+            <RedirectToLogin />
+        }
+        else
+        {
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        }
     </Found>
     <NotFound>
         <PageTitle>Not found</PageTitle>
         <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+            <p role="alert">Desculpe, não há nada neste endereço.</p>
         </LayoutView>
     </NotFound>
 </Router>

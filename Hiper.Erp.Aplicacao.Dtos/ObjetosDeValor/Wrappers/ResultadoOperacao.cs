@@ -5,8 +5,8 @@
         public T Dados { get; set; }
         public Paginacao Paginacao { get; set; }
         public List<string> Erros { get; set; } = new List<string>();
-        public bool Sucesso => Erros.Count == 0;
-        public string Mensagem => Erros.Count > 0 ? this.Erros.FirstOrDefault() : "Operação realizada com sucesso.";
+        public bool Sucesso => Erros?.Count == 0;
+        public string Mensagem => Erros?.Count > 0 ? Erros?.FirstOrDefault() : "Operação realizada com sucesso.";
 
         public void AdicionarErro(string erro)
         {

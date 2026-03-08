@@ -4,13 +4,13 @@ namespace Hiper.Erp.Apresentacao.Web.Handlers
 {
     public class TenantHandler : DelegatingHandler
     {    
-        public static string? TenantId { get; set; }
+        public static string? JwtToken { get; set; }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (!string.IsNullOrEmpty(TenantId))
+            if (!string.IsNullOrEmpty(JwtToken))
             {
-                request.Headers.Add("X-Tenant-Id", TenantId);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", JwtToken);
             }
 
             return await base.SendAsync(request, cancellationToken);

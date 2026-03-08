@@ -11,6 +11,8 @@ using Hiper.Erp.Aplicacao.Servicos.Agentes;
 using Hiper.Erp.Aplicacao.Servicos.FormasPagamentos;
 using Hiper.Erp.Aplicacao.Servicos.Produtos;
 using Hiper.Erp.Aplicacao.Servicos.Vendas;
+using Hiper.Erp.Aplicacao.Interfaces.Servicos.ServicosExternos;
+using Hiper.Erp.Aplicacao.Servicos.ServicosExternos;
 using Hiper.Erp.Apresentacao.Web;
 using Hiper.Erp.Apresentacao.Web.Handlers;
 using Hiper.Erp.Infraestrutura.Repositorios.API.Agentes;
@@ -42,6 +44,17 @@ builder.Services.AddScoped<IServicoFormasPagamentos, ServicoFormasPagamentos>();
 builder.Services.AddScoped<IServicoProdutos, ServicoProdutos>();
 builder.Services.AddScoped<IServicoVendas, ServicoVendas>();
 builder.Services.AddScoped<IServicoVendasItens, ServicoVendasItens>();
+
+builder.Services.AddHttpClient("HiperAdm", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7125");
+});
+
+builder.Services.AddScoped<IServicoAdministrador, ServicoHiperAdm>(sp =>
+{
+    var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("HiperAdm");
+    return new ServicoHiperAdm(httpClient);
+});
 
 builder.Services.AddHttpClient("HiperApi", client =>
 {

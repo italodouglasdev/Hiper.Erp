@@ -2,10 +2,12 @@ using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros;
 using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using Hiper.Erp.Aplicacao.Dtos.Vendas;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.Vendas;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hiper.Erp.Apresentacao.Api.Controllers.Vendas
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class VendasItensController : Controller

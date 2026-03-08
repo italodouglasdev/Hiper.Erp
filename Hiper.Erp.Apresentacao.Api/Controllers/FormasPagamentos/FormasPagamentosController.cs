@@ -2,10 +2,12 @@ using Hiper.Erp.Aplicacao.Dtos.FormasPagamentos;
 using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros;
 using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.FormasPagamentos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hiper.Erp.Apresentacao.Api.Controllers.FormasPagamentos
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class FormasPagamentosController : Controller

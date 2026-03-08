@@ -1,55 +1,154 @@
-﻿@page "/Auth/Login"
+@page "/Auth/Login"
+@layout AuthLayout
 
-@using Hiper.Erp.Apresentacao.Web.Components.Buttons
-@using Hiper.Erp.Apresentacao.Web.Components.Cards
-@using Hiper.Erp.Apresentacao.Web.Components.Containers
-@using Hiper.Erp.Apresentacao.Web.Components.Forms
 @using Hiper.Erp.Apresentacao.Web.Components.Inputs
+@using Hiper.Erp.Aplicacao.Interfaces.Servicos.ServicosExternos
+@using Hiper.Erp.Aplicacao.Dtos.ServicosExternos
+@using Hiper.Erp.Apresentacao.Web.Handlers
 
+@inject IServicoAdministrador ServicoAdmin
+@inject NavigationManager Navigation
 
-<ContainerPadrao Breakpoint="xxl" Class="hold-transition login-page">
-
-    <div class="login-box">
-
-        <div class="login-logo">
-            <a href="/"><b>Hiper</b> ERP</a>
-        </div>
-
-        <CardPadrao>
-
-            <CardBodyPadrao Class="login-card-body">
-
-                <p class="login-box-msg">Informe seu E-mail e Senha</p>
-
-                <FormPadrao>
-
-                    <RowPadrao>
-                        <InputTextLogin Placeholder="E-mail" Icon="fas fa-envelope" Type="email" />
-                        <InputPasswordLogin Placeholder="Senha" />
-                    </RowPadrao>
-
-                    <RowPadrao Class="mt-2">
-                        <ColPadrao>
-                            <ButtonPadrao Class="btn-block">
-                                Entrar <i class="fas fa-sign-in-alt"></i>
-                            </ButtonPadrao>
-                        </ColPadrao>
-                    </RowPadrao>
-
-                </FormPadrao>
-            </CardBodyPadrao>
-
-        </CardPadrao>
-
+<div class="login-box">
+    <div class="login-logo">
+        <a href="/"><b>Hiper</b> ERP</a>
     </div>
 
-    <footer class="text-center">
+    <div class="card">
+        <div class="card-body login-card-body">
+            <p class="login-box-msg">Informe seu E-mail e Senha</p>
 
-        <p class="mt-3 mb-2">© Hiper - ERP @DateTime.Now.Year.ToString()</p>
+            <div>
+                <div class="input-group mb-3">
+                    <input type="email" class="form-control" placeholder="E-mail" @bind="Email">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" placeholder="Senha" @bind="Senha">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
 
-        <p> Desenvolvido por <a href="https://italodouglas.dev" target="_blank">italoDouglas.dev</a></p>
+                @if (Lojas != null && Lojas.Any())
+                {
+                    <div class="form-group mb-3">
+                        <label>Selecione a Loja</label>
+                        <select class="form-control" @bind="TenantIdSelecionado">
+                            <option value="">Escolha uma loja...</option>
+                            @foreach (var loja in Lojas)
+                            {
+                                <option value="@loja.XTenantId.ToString()">@loja.NomeFantasia (@loja.CNPJ)</option>
+                            }
+                        </select>
+                    </div>
+                }
 
+                @if (!string.IsNullOrEmpty(MensagemErro))
+                {
+                    <div class="alert alert-danger mt-2">
+                        @MensagemErro
+                    </div>
+                }
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary btn-block" @onclick="EfetuarLogin" disabled="@Carregando">
+                            @if (Carregando)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span> Carregando...</span>
+                            }
+                            else
+                            {
+                                <span>Entrar <i class="fas fa-sign-in-alt ml-1"></i></span>
+                            }
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center mt-4">
+        <p class="mb-1">© Hiper - ERP @DateTime.Now.Year.ToString()</p>
+        <p>Desenvolvido por <a href="https://italodouglas.dev" target="_blank">italoDouglas.dev</a></p>
     </footer>
+</div>
 
-</ContainerPadrao>
+@code {
+    private string Email { get; set; } = string.Empty;
+    private string Senha { get; set; } = string.Empty;
+    private string? TenantIdSelecionado { get; set; }
+    private List<LojaDto>? Lojas { get; set; }
+    private string? MensagemErro { get; set; }
+    private bool Carregando { get; set; }
 
+    private async Task EfetuarLogin()
+    {
+        try
+        {
+            Carregando = true;
+            MensagemErro = null;
+
+            if (Lojas == null)
+            {
+                var resultado = await ServicoAdmin.Login(Email, Senha);
+                if (resultado.Sucesso && resultado.Dados != null)
+                {
+                    TenantHandler.JwtToken = resultado.Dados.Token;
+
+                    var resultadoLojas = await ServicoAdmin.Lojas();
+                    if (resultadoLojas.Sucesso && resultadoLojas.Dados != null)
+                    {
+                        Lojas = resultadoLojas.Dados;
+                        if (Lojas.Count == 1)
+                        {
+                            TenantIdSelecionado = Lojas[0].XTenantId.ToString();
+                            FinalizarLogin();
+                        }
+                    }
+                    else
+                    {
+                        MensagemErro = "Erro ao carregar lojas: " + resultadoLojas.Mensagem;
+                    }
+                }
+                else
+                {
+                    MensagemErro = "Falha no login: " + resultado.Mensagem;
+                }
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(TenantIdSelecionado))
+                {
+                    MensagemErro = "Por favor, selecione uma loja.";
+                    return;
+                }
+                FinalizarLogin();
+            }
+        }
+        catch (Exception ex)
+        {
+            MensagemErro = "Erro inesperado: " + ex.Message;
+        }
+        finally
+        {
+            Carregando = false;
+        }
+    }
+
+    private void FinalizarLogin()
+    {
+        // No fluxo simplificado, o TenantId pode ser enviado uma vez no login
+        // ou extraído do token. Vamos manter o envio via header apenas se necessário,
+        // mas aqui já garantimos que o JwtToken está preenchido.
+        Navigation.NavigateTo("/");
+    }
+}

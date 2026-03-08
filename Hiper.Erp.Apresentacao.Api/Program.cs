@@ -35,8 +35,11 @@ builder.Services.AddMemoryCache();
 builder.Services.AddScoped<ICacheService, CacheService>();
 
 
-// 2. Mock do Servidor de Administração (Centralizado)
-builder.Services.AddScoped<IServicoAdministrador, ServicoAdministradorMock>();
+// 2. Servidor de Administração (Centralizado)
+builder.Services.AddHttpClient<IServicoAdministrador, ServicoHiperAdm>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["HiperAdm:Url"] ?? "https://localhost:7125");
+});
 
 // 3. Contexto do Tenant (Scoped para cada requisição)
 builder.Services.AddScoped<ITenantContext, TenantContext>();
@@ -87,12 +90,14 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Hiper ERP - API", Version = "v1" });
 
-    options.AddSecurityDefinition("TenantId", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
-        Name = "X-Tenant-Id",
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Description = "Insira o ID do Tenant (ex: cliente_pg ou cliente_sql)"
+        Description = "Insira o token JWT gerado no ADM"
     });
 
     options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
@@ -103,7 +108,7 @@ builder.Services.AddSwaggerGen(options =>
                 Reference = new Microsoft.OpenApi.Models.OpenApiReference
                 {
                     Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "TenantId"
+                    Id = "Bearer"
                 }
             },
             Array.Empty<string>()
@@ -130,7 +135,6 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
-
 
 var app = builder.Build();
 
