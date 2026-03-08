@@ -60,7 +60,7 @@ namespace Hiper.Erp.Aplicacao.Servicos.Vendas
             {
                 var repResultado = await repVenda.ObtenhaListaAsync();
                 resultado.Dados = mapeador.Map<List<DtoVenda>>(repResultado.Dados);
-                resultado.AdicionarPaginacao(1, repResultado.Dados.Count, 100);
+                resultado.AdicionarPaginacao(1, repResultado?.Dados?.Count ?? 0, 100);
             }
             catch (Exception ex)
             {

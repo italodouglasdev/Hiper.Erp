@@ -53,7 +53,7 @@ namespace Hiper.Erp.Aplicacao.Servicos.FormasPagamentos
             {
                 var repResultado = await repFormaPagamento.ObtenhaListaAsync();
                 resultado.Dados = mapeador.Map<List<DtoFormaPagamento>>(repResultado.Dados);
-                resultado.AdicionarPaginacao(1, repResultado.Dados.Count, 100);
+                resultado.AdicionarPaginacao(1, repResultado?.Dados?.Count ?? 0, 100);
             }
             catch (Exception ex)
             {

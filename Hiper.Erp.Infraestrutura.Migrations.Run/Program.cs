@@ -13,7 +13,7 @@ namespace Hiper.Erp.Infraestrutura.Migrations.Run
         private static void GerarScriptRetaguarda()
         {
             // Configurar
-            var tipoSgdb = EnumTipoSgdb.PostgreSQL;           
+            var tipoSgdb = EnumTipoSgdb.SQLServer;           
             var diretorioSaida = @"C:\Hiper.Erp\Scripts";
 
             // Criar serviço

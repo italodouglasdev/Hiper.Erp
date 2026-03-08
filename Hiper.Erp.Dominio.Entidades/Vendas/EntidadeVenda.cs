@@ -27,6 +27,10 @@ namespace Hiper.Erp.Dominio.Entidades.Vendas
         [Column("NOME_CLIENTE")]
         public string? NomeCliente { get; set; }
 
+        [Column("VALOR_TOTAL")]
+        [VersaoCampo(EnumVersao.V1_2, Descricao = "Campo adicionado na versão 1.2 para cálculo do valor total da venda")]
+        public decimal? ValorTotal { get; set; }
+
         [Column("DATA_HORA")]
         public DateTime? DataHora { get; set; }
 

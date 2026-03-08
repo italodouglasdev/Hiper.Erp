@@ -19,6 +19,9 @@ namespace Hiper.Erp.Aplicacao.Dtos.Vendas
         [ParametrosDeTabela(NomeColuna = "Cliente", ExibirColuna = true, ExibirFiltros = true)]
         public string? NomeCliente { get; set; }
 
+        [ParametrosDeTabela(NomeColuna = "Valor Total", ExibirColuna = false, ExibirFiltros = false)]
+        public decimal? ValorTotal { get; set; }   
+
         [ParametrosDeTabela(NomeColuna = "Data/Hora", ExibirColuna = true, ExibirFiltros = true)]
         public DateTime? DataHora { get; set; }
 

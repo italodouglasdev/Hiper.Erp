@@ -22,5 +22,17 @@ namespace Hiper.Erp.Dominio.Entidades.Vendas
 
         [Column("NOME_PRODUTO")]
         public string? NomeProduto { get; set; }
+
+        [Column("QUANTIDADE")]
+        [VersaoCampo(EnumVersao.V1_2, Descricao = "Campo adicionado na versão 1.2 para quantidade do item")]
+        public decimal? Quantidade { get; set; }
+
+        [Column("VALOR_UNITARIO")]
+        [VersaoCampo(EnumVersao.V1_2, Descricao = "Campo adicionado na versão 1.2 para valor uniário do item")]
+        public decimal? ValorUnitario { get; set; }
+
+        [Column("VALOR_TOTAL")]
+        [VersaoCampo(EnumVersao.V1_2, Descricao = "Campo adicionado na versão 1.2 para valor total do item")]
+        public decimal? ValorTotal { get; set; }
     }
 }

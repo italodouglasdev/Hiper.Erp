@@ -17,5 +17,14 @@ namespace Hiper.Erp.Aplicacao.Dtos.Vendas
         [ParametrosDeTabela(NomeColuna = "Produto", ExibirColuna = true, ExibirFiltros = true)]
         public string? NomeProduto { get; set; }
 
+        [ParametrosDeTabela(NomeColuna = "Quantidade", ExibirColuna = false, ExibirFiltros = false)]
+        public decimal? Quantidade { get; set; }
+
+        [ParametrosDeTabela(NomeColuna = "Valor Unitário", ExibirColuna = false, ExibirFiltros = false)]
+        public decimal? ValorUnitario { get; set; }
+
+        [ParametrosDeTabela(NomeColuna = "Valor Total", ExibirColuna = false, ExibirFiltros = false)]
+        public decimal? ValorTotal { get; set; }
+
     }
 }

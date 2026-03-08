@@ -17,6 +17,9 @@ namespace Hiper.Erp.Aplicacao.Dtos.Produtos
         [ParametrosDeTabela(NomeColuna = "Preço de Venda", ExibirColuna = true, ExibirFiltros = true)]
         public decimal? PrecoVenda { get; set; }
 
+        [ParametrosDeTabela(NomeColuna = "Estoque", ExibirColuna = true, ExibirFiltros = true)]
+        public decimal? Estoque { get; set; }
+
         [ParametrosDeTabela(NomeColuna = "Ativo", ExibirColuna = true, ExibirFiltros = true)]
         public bool Ativo { get; set; }
 

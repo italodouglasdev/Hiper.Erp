@@ -23,6 +23,10 @@ namespace Hiper.Erp.Dominio.Entidades.Produtos
         [Column("PRECO_VENDA")]
         public decimal? PrecoVenda { get; set; }
 
+        [Column("ESTOQUE")]
+        [VersaoCampo(EnumVersao.V1_2, Descricao = "Campo adicionado na versão 1.2 para controle de estoque")]
+        public decimal? Estoque { get; set; }
+
         [Column("ATIVO")]
         public bool Ativo { get; set; }
 
