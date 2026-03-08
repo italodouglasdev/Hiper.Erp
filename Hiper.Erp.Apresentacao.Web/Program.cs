@@ -28,6 +28,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<ModalServico>();
 builder.Services.AddTransient<TenantHandler>();
 
@@ -51,9 +52,10 @@ builder.Services.AddHttpClient("HiperAdm", client =>
 })
 .AddHttpMessageHandler<TenantHandler>();
 
-builder.Services.AddScoped<IServicoAdministrador, ServicoHiperAdm>(sp =>
+builder.Services.AddScoped<IServicoAdministrador>(sp =>
 {
-    var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("HiperAdm");
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+    var httpClient = httpClientFactory.CreateClient("HiperAdm");
     return new ServicoHiperAdm(httpClient);
 });
 

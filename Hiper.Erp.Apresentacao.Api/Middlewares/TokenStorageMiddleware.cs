@@ -1,5 +1,3 @@
-﻿using System.Net.Http.Headers;
-
 namespace Hiper.Erp.Apresentacao.Api.Middlewares
 {
     public class TokenStorageMiddleware
@@ -18,17 +16,11 @@ namespace Hiper.Erp.Apresentacao.Api.Middlewares
             if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
             {
                 var token = authHeader.Substring("Bearer ".Length).Trim();
-                // Armazena o token para ser usado pelo HttpClient
-                TokenStorage.JwtToken = token;
+                // Armazena o token no HttpContext.Items
+                context.Items["JwtToken"] = token;
             }
 
             await _next(context);
         }
-    }
-
-    // Classe para armazenar o token
-    public static class TokenStorage
-    {
-        public static string? JwtToken { get; set; }
     }
 }

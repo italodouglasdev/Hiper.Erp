@@ -1,6 +1,7 @@
 ﻿using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using Hiper.Erp.Aplicacao.Dtos.ServicosExternos;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.ServicosExternos;
+using Microsoft.AspNetCore.Http;
 
 namespace Hiper.Erp.Aplicacao.Servicos.ServicosExternos
 {
@@ -9,10 +10,16 @@ namespace Hiper.Erp.Aplicacao.Servicos.ServicosExternos
 
         private readonly ServicosBaseApiRest servicoApi;
 
-        public ServicoHiperAdm(HttpClient httpClient) : base(httpClient)
+        public ServicoHiperAdm(HttpClient httpClient) : base(httpClient, null)
         {
-            servicoApi = new ServicosBaseApiRest(httpClient);
+            servicoApi = new ServicosBaseApiRest(httpClient, null);
         }
+
+        public ServicoHiperAdm(HttpClient httpClient, IHttpContextAccessor httpContextAccessor) : base(httpClient, httpContextAccessor)
+        {
+            servicoApi = new ServicosBaseApiRest(httpClient, httpContextAccessor);
+        }
+
 
         public async Task<ResultadoOperacao<UsuarioLogadoDto>> Login(string email, string senha)
         {

@@ -13,7 +13,6 @@ using Hiper.Erp.Aplicacao.Servicos.FormasPagamentos;
 using Hiper.Erp.Aplicacao.Servicos.Produtos;
 using Hiper.Erp.Aplicacao.Servicos.ServicosExternos;
 using Hiper.Erp.Aplicacao.Servicos.Vendas;
-using Hiper.Erp.Apresentacao.Api.Handlers;
 using Hiper.Erp.Apresentacao.Api.Middlewares;
 using Hiper.Erp.Infraestrutura.Bancos;
 using Hiper.Erp.Infraestrutura.Bancos.SGDBs.Fabricas;
@@ -34,15 +33,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
 
 
 // 2. Servidor de Administração (Centralizado)
-builder.Services.AddScoped<TenantHandler>();
-builder.Services.AddHttpClient<IServicoAdministrador, ServicoHiperAdm>(client =>
+builder.Services.AddScoped<IServicoAdministrador>(sp =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["HiperAdm:Url"] ?? "https://localhost:7125");
-})
-.AddHttpMessageHandler<TenantHandler>();
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+    var httpClient = httpClientFactory.CreateClient();
+    httpClient.BaseAddress = new Uri(builder.Configuration["HiperAdm:Url"] ?? "https://localhost:7125");
+    var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
+    return new ServicoHiperAdm(httpClient, httpContextAccessor);
+});
 
 // 3. Contexto do Tenant (Scoped para cada requisição)
 builder.Services.AddScoped<ITenantContext, TenantContext>();
@@ -154,10 +157,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
 
-// 9. Middleware de Tenant (Deve vir ANTES da Autenticação para configurar o banco)
-app.UseMiddleware<TenantMiddleware>();
-
+// 9. Middleware de Armazenamento de Token (Deve vir ANTES de Tenant para capturar o token)
 app.UseMiddleware<TokenStorageMiddleware>();
+
+// 10. Middleware de Tenant (Deve vir ANTES da Autenticação para configurar o banco)
+app.UseMiddleware<TenantMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

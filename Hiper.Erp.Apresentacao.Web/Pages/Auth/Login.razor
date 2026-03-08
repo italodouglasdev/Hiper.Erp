@@ -105,7 +105,6 @@
                     TenantHandler.JwtToken = resultado.Dados.Token;
 
                     var resultadoLojas = await ServicoAdmin.Lojas();
-
                     if (resultadoLojas.Sucesso && resultadoLojas.Dados != null)
                     {
                         Lojas = resultadoLojas.Dados;
