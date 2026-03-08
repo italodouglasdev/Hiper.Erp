@@ -4,6 +4,7 @@
     <Project Path="Hiper.Erp.Aplicacao.Interfaces/Hiper.Erp.Aplicacao.Interfaces.csproj" />
     <Project Path="Hiper.Erp.Aplicacao.Mapeadores/Hiper.Erp.Aplicacao.Mapeadores.csproj" />
     <Project Path="Hiper.Erp.Aplicacao.Servicos/Hiper.Erp.Aplicacao.Servicos.csproj" />
+    <Project Path="Hiper.Erp.Aplicacao.Validadores/Hiper.Erp.Aplicacao.Validadores.csproj" Id="20329571-12e4-43e2-9ce2-8dbb668ca068" />
   </Folder>
   <Folder Name="/Apresentacao/">
     <Project Path="Hiper.Erp.Apresentacao.Api/Hiper.Erp.Apresentacao.Api.csproj" />

@@ -3,7 +3,9 @@ using Hiper.Erp.Aplicacao.Dtos.Agentes;
 using Hiper.Erp.Aplicacao.Dtos.Filtros;
 using Hiper.Erp.Aplicacao.Dtos.Wrappers;
 using Hiper.Erp.Aplicacao.Interfaces.Repositorios.Agentes;
+using Hiper.Erp.Aplicacao.Interfaces.Repositorios.Vendas;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.Agentes;
+using Hiper.Erp.Aplicacao.Validadores.Agentes;
 using Hiper.Erp.Dominio.Entidades.Agentes;
 
 namespace Hiper.Erp.Aplicacao.Servicos.Agentes
@@ -13,18 +15,22 @@ namespace Hiper.Erp.Aplicacao.Servicos.Agentes
         #region Propriedades
 
         private IRepositorioAgentes repAgente;
+        private IRepositorioVendas repVendas;
 
         #endregion
 
         #region Construtores
 
-        public ServicoAgentes(IMapper mapper, IRepositorioAgentes repAgente) : base(mapper)
+        public ServicoAgentes(
+            IMapper mapper,
+            IRepositorioAgentes repAgente,
+            IRepositorioVendas repVendas) : base(mapper)
         {
             this.repAgente = repAgente;
+            this.repVendas = repVendas;
         }
 
         #endregion
-
 
         #region Métodos Públicos
 
@@ -41,11 +47,7 @@ namespace Hiper.Erp.Aplicacao.Servicos.Agentes
             }
             catch (Exception ex)
             {
-                resultado.AdicionarErro("Erro inesperado.");
-            }
-            finally
-            {
-
+                resultado.AdicionarErro($"Erro fatal. Detalhes: {ex.Message}");
             }
 
             return resultado;
@@ -64,11 +66,7 @@ namespace Hiper.Erp.Aplicacao.Servicos.Agentes
             }
             catch (Exception ex)
             {
-                resultado.AdicionarErro("Erro inesperado.");
-            }
-            finally
-            {
-
+                resultado.AdicionarErro($"Erro fatal. Detalhes: {ex.Message}");
             }
 
             return resultado;
@@ -89,10 +87,7 @@ namespace Hiper.Erp.Aplicacao.Servicos.Agentes
             }
             catch (Exception ex)
             {
-                resultado.AdicionarErro("Erro inesperado.");
-            }
-            finally
-            {
+                resultado.AdicionarErro($"Erro fatal. Detalhes: {ex.Message}");
             }
 
             return resultado;
@@ -120,10 +115,7 @@ namespace Hiper.Erp.Aplicacao.Servicos.Agentes
             }
             catch (Exception ex)
             {
-                resultado.AdicionarErro("Erro inesperado.");
-            }
-            finally
-            {
+                resultado.AdicionarErro($"Erro fatal. Detalhes: {ex.Message}");
             }
 
             return resultado;
@@ -133,46 +125,30 @@ namespace Hiper.Erp.Aplicacao.Servicos.Agentes
         {
             var resultado = new ResultadoOperacao<DtoAgente>();
 
-
             try
             {
+                var validacaoDto = DtoAgenteValidador.Cadastrar(dtoAgente);
+                if (!validacaoDto.Sucesso)
+                {
+                    resultado.AdicionarErros(validacaoDto.Erros);
+                    return resultado;
+                }
 
-                // 1. CHAMA SUA CAMADA DE VALIDAÇÃO PERSONALIZADA
-                //var validacaoDto = DtoAgenteValidador.ValidarCadastrar(dtoAgente);
-                //if (!validacaoDto.Sucesso)
-                //{
-                //    resultado.AdicionarErros(validacaoDto.Erros);
-                //    return resultado;
-                //}
+                var validarCpfExistente = await repAgente.ObtenhaPorCnpjCpfAsync(dtoAgente.CnpjCpf);
+                if (validarCpfExistente.Dados?.Codigo > 0)
+                {
+                    resultado.AdicionarErro("Já existe um agente com o CNPJ/CPF informado.");
+                    return resultado;
+                }
 
-
-                // 2. VALIDAÇÃO DE INFRA (Regras que precisam de Banco)
-                //if (await repAgente.ExisteCpf(dtoAgente.Cpf))
-                //{
-                //    resultado.AdicionarErro("Este CPF já está cadastrado.");
-                //    return resultado;
-                //}
-
-
-                // 3. MAPEAMENTO
                 var entidade = mapeador.Map<EntidadeAgente>(dtoAgente);
-
-
-                // 4. VALIDAÇÃO DE DOMÍNIO (A entidade se auto-valida)
-                //var validacaoEntidade = entidade.ValidarRegrasDeNegocioCadastrar();
-                //if (!validacaoEntidade.Sucesso)
-                //{
-                //    resultado.AdicionarErros(validacaoEntidade.Erros);
-                //    return resultado;
-                //}
-
-                // 5. PERSISTÊNCIA
                 var repResultado = await repAgente.CadastrarAsync(entidade);
                 resultado.Dados = mapeador.Map<DtoAgente>(repResultado.Dados);
+
             }
             catch (Exception ex)
             {
-                resultado.AdicionarErro("Erro interno.");
+                resultado.AdicionarErro($"Erro fatal. Detalhes: {ex.Message}");
             }
 
             return resultado;
@@ -184,43 +160,21 @@ namespace Hiper.Erp.Aplicacao.Servicos.Agentes
 
             try
             {
-                // 1. CHAMA SUA CAMADA DE VALIDAÇÃO PERSONALIZADA
-                //var validacaoDto = DtoAgenteValidador.ValidarAtualizar(dtoAgente);
-                //if (!validacaoDto.Sucesso)
-                //{
-                //    resultado.AdicionarErros(validacaoDto.Erros);
-                //    return resultado;
-                //}
+                var validacaoDto = DtoAgenteValidador.Atualizar(dtoAgente);
+                if (!validacaoDto.Sucesso)
+                {
+                    resultado.AdicionarErros(validacaoDto.Erros);
+                    return resultado;
+                }
 
-
-                // 2. VALIDAÇÃO DE INFRA (Regras que precisam de Banco)
-                //if (await repAgente.ExisteCpf(dtoAgente.Cpf))
-                //{
-                //    resultado.AdicionarErro("Este CPF já está cadastrado.");
-                //    return resultado;
-                //}
-
-
-                // 3. MAPEAMENTO
                 var entidade = mapeador.Map<EntidadeAgente>(dtoAgente);
-
-
-                // 4. VALIDAÇÃO DE DOMÍNIO (A entidade se auto-valida)
-                //var validacaoEntidade = entidade.ValidarRegrasDeNegocioAtualizar();
-                //if (!validacaoEntidade.Sucesso)
-                //{
-                //    resultado.AdicionarErros(validacaoEntidade.Erros);
-                //    return resultado;
-                //}
-
-                // 5. PERSISTÊNCIA
                 var repResultado = await repAgente.AtualizarAsync(entidade);
                 resultado.Dados = mapeador.Map<DtoAgente>(repResultado.Dados);
 
             }
             catch (Exception ex)
             {
-                resultado.AdicionarErro("Erro inesperado ao atualizar.");
+                resultado.AdicionarErro($"Erro fatal. Detalhes: {ex.Message}");
             }
 
             return resultado;
@@ -232,22 +186,26 @@ namespace Hiper.Erp.Aplicacao.Servicos.Agentes
 
             try
             {
-                var repAgenteResultado = await repAgente.DeletarAsync(codigo);
 
+                var validarSeClientePossuiVendas = await repVendas.ObtenhaListaAsync();
+                if (validarSeClientePossuiVendas.Dados?.Count > 0)
+                {
+                    resultado.AdicionarErro("Não é possível deletar o agente, existem vendas vinculadas.");
+                    return resultado;
+                }
+
+                var repAgenteResultado = await repAgente.DeletarAsync(codigo);
                 resultado.Dados = repAgenteResultado.Dados;
             }
             catch (Exception ex)
             {
-                resultado.AdicionarErro("Erro inesperado ao deletar.");
+                resultado.AdicionarErro($"Erro fatal. Detalhes: {ex.Message}");
             }
 
             return resultado;
         }
 
         #endregion
-
-        #region Métodos Privados
-        //Nada ainda
-        #endregion
+      
     }
 }

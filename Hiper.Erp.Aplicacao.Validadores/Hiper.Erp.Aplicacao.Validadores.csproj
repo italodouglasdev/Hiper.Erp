@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hiper.Erp.Aplicacao.Dtos\Hiper.Erp.Aplicacao.Dtos.csproj" />
+    <ProjectReference Include="..\Hiper.Erp.Utilitarios.ValidadorHelper\Hiper.Erp.Utilitarios.ValidadorHelper.csproj" />
+  </ItemGroup>
+
+</Project>

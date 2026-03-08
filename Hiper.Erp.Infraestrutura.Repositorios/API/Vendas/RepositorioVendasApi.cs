@@ -46,5 +46,6 @@ namespace Hiper.Erp.Infraestrutura.Repositorios.API.Vendas
         {
             return await repositorioApi.DeleteAsync($"{endpoint}/Deletar/{codigo}");
         }
+
     }
 }

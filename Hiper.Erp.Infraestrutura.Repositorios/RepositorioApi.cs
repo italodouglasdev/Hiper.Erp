@@ -112,5 +112,10 @@ namespace Hiper.Erp.Infraestrutura.Repositorios
                 resultado.Erros,
                 resultado.Paginacao);
         }
+
+        internal Task<Task<ResultadoOperacao<T>>> GetAsync<T>(string v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

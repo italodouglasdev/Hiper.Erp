@@ -62,5 +62,6 @@ namespace Hiper.Erp.Infraestrutura.Repositorios.Vendas
             }
             return ResultadoOperacao<bool>.Ok(true);
         }
+      
     }
 }
