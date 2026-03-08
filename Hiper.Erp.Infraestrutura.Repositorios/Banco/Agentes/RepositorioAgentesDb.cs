@@ -1,5 +1,5 @@
-﻿using Hiper.Erp.Aplicacao.Dtos.Filtros;
-using Hiper.Erp.Aplicacao.Dtos.Wrappers;
+﻿using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros;
+using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using Hiper.Erp.Aplicacao.Interfaces.Repositorios.Agentes;
 using Hiper.Erp.Dominio.Entidades.Agentes;
 using Hiper.Erp.Infraestrutura.Bancos;

@@ -1,7 +1,7 @@
 @page "/Agentes/Agente"
 
 @using Hiper.Erp.Aplicacao.Dtos.Agentes
-@using Hiper.Erp.Aplicacao.Dtos.Filtros
+@using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros
 @using Hiper.Erp.Aplicacao.Interfaces.Servicos
 @using Hiper.Erp.Aplicacao.Interfaces.Servicos.Agentes
 @using Hiper.Erp.Apresentacao.Web.Components.Accordions
@@ -101,7 +101,7 @@
         filtroAtual = filtro;
         paginaAtual = 1;
 
-        var response = new Aplicacao.Dtos.Wrappers.ResultadoOperacao<List<DtoAgente>>();
+        var response = new Aplicacao.Dtos.ObjetosDeValor.Wrappers.ResultadoOperacao<List<DtoAgente>>();
 
         if (filtro?.Campos?.Count > 0)
         {

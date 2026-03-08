@@ -1,4 +1,4 @@
-﻿namespace Hiper.Erp.Aplicacao.Dtos.Tabelas
+﻿namespace Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Tabelas
 {
     public class TabelaColuna
     {

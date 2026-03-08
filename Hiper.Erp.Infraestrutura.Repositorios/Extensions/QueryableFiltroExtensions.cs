@@ -1,4 +1,4 @@
-﻿using Hiper.Erp.Aplicacao.Dtos.Filtros;
+﻿using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros;
 using Hiper.Erp.Dominio.Enumeradores;
 using System.Linq.Expressions;
 using System.Reflection;

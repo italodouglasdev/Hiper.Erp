@@ -1,7 +1,7 @@
 ﻿using Hiper.Erp.Aplicacao.Dtos.Agentes;
 using Hiper.Erp.Aplicacao.Dtos.FormasPagamentos;
+using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using Hiper.Erp.Aplicacao.Dtos.Produtos;
-using Hiper.Erp.Aplicacao.Dtos.Wrappers;
 using Hiper.Erp.Utilitarios.ValidadorHelper;
 using System;
 using System.Collections.Generic;

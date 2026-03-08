@@ -1,4 +1,4 @@
-﻿using Hiper.Erp.Aplicacao.Dtos.Wrappers;
+﻿using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using Hiper.Erp.Dominio.Entidades.Agentes;
 
 namespace Hiper.Erp.Aplicacao.Interfaces.Repositorios.Agentes

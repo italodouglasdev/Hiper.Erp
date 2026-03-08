@@ -4,7 +4,7 @@
 @using Hiper.Erp.Aplicacao.Dtos.Agentes
 @using Hiper.Erp.Aplicacao.Dtos.FormasPagamentos
 @using Hiper.Erp.Aplicacao.Dtos.Produtos
-@using Hiper.Erp.Aplicacao.Dtos.Filtros
+@using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros
 @using Hiper.Erp.Aplicacao.Interfaces.Servicos
 @using Hiper.Erp.Aplicacao.Interfaces.Servicos.Vendas
 @using Hiper.Erp.Aplicacao.Interfaces.Servicos.Agentes
@@ -135,7 +135,7 @@
         filtroAtual = filtro;
         paginaAtual = 1;
 
-        var response = new Aplicacao.Dtos.Wrappers.ResultadoOperacao<List<DtoVenda>>();
+        var response = new Aplicacao.Dtos.ObjetosDeValor.Wrappers.ResultadoOperacao<List<DtoVenda>>();
 
         if (filtro?.Campos?.Count > 0)
         {

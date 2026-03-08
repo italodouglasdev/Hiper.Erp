@@ -1,4 +1,4 @@
-﻿namespace Hiper.Erp.Aplicacao.Dtos.Wrappers
+﻿namespace Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers
 {
     public class ResultadoOperacao<T>
     {

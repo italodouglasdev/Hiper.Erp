@@ -1,5 +1,5 @@
-﻿using Hiper.Erp.Aplicacao.Dtos.ServicosExternos;
-using Hiper.Erp.Aplicacao.Dtos.Wrappers;
+﻿using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
+using Hiper.Erp.Aplicacao.Dtos.ServicosExternos;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.ServicosExternos;
 
 namespace Hiper.Erp.Aplicacao.Servicos.ServicosExternos

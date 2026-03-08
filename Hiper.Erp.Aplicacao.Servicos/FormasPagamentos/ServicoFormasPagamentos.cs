@@ -1,7 +1,7 @@
 using AutoMapper;
-using Hiper.Erp.Aplicacao.Dtos.Filtros;
 using Hiper.Erp.Aplicacao.Dtos.FormasPagamentos;
-using Hiper.Erp.Aplicacao.Dtos.Wrappers;
+using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros;
+using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using Hiper.Erp.Aplicacao.Interfaces.Repositorios.FormasPagamentos;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.FormasPagamentos;
 using Hiper.Erp.Aplicacao.Validadores.FormasPagamentos;

@@ -1,6 +1,6 @@
-using Hiper.Erp.Aplicacao.Dtos.Filtros;
+using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros;
+using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using Hiper.Erp.Aplicacao.Dtos.Produtos;
-using Hiper.Erp.Aplicacao.Dtos.Wrappers;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.Produtos;
 using Microsoft.AspNetCore.Mvc;
 

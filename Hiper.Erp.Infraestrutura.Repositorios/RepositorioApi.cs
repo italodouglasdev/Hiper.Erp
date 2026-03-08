@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Hiper.Erp.Aplicacao.Dtos.Filtros;
-using Hiper.Erp.Aplicacao.Dtos.Wrappers;
+using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros;
+using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using System.Net.Http.Json;
 
 namespace Hiper.Erp.Infraestrutura.Repositorios

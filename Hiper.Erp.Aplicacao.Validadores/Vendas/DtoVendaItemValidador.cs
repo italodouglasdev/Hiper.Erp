@@ -1,5 +1,5 @@
-﻿using Hiper.Erp.Aplicacao.Dtos.Vendas;
-using Hiper.Erp.Aplicacao.Dtos.Wrappers;
+﻿using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
+using Hiper.Erp.Aplicacao.Dtos.Vendas;
 using Hiper.Erp.Utilitarios.ValidadorHelper;
 
 namespace Hiper.Erp.Aplicacao.Validadores.Vendas
