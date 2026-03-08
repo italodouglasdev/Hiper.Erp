@@ -2,6 +2,7 @@
 using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using System.Net.Http.Json;
 
+
 namespace Hiper.Erp.Aplicacao.Servicos
 {
     public class ServicosBaseApiRest
@@ -17,7 +18,23 @@ namespace Hiper.Erp.Aplicacao.Servicos
         {
             try
             {
+                //if (string.IsNullOrEmpty(url))
+                //{
+                //    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiaXRhbG9AZW1haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIxYTNjMzVhMi01OTkxLTQ3OWYtOTg5OC0xOGU4Y2QyZjA5NzQiLCJqdGkiOiJhYmViM2ViMS01YjA3LTRiYmEtYmE1Mi02YmNjNWQ0NWY1YTkiLCJYLVRlbmFudC1JZCI6IjQwMWE5NjAyLTI1MjgtNGQyNS1iYzhlLWI5ZjdmZDM0Yjg3MCIsIm5iZiI6MTc3Mjk3OTkzMywiZXhwIjoxNzczNTg0NzMzLCJpc3MiOiJIaXBlci5BZG0ifQ.IR-Nj4UIHEESQDmkhkTETcPP1lgebergGWN76AKhKP0";
+
+                //    HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                //}
+
+                // Adiciona o token ao header
+                //if (!string.IsNullOrEmpty(Hiper.Erp.Apresentacao.Api.Middlewares.TokenStorage.JwtToken))
+                //{
+                //    HttpClient.DefaultRequestHeaders.Authorization =
+                //        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Hiper.Erp.Apresentacao.Api.Middlewares.TokenStorage.JwtToken);
+                //}
+
+
                 var response = await HttpClient.GetAsync(url);
+
                 return await ProcessarResposta<TDto>(response);
             }
             catch (Exception ex)
@@ -25,6 +42,7 @@ namespace Hiper.Erp.Aplicacao.Servicos
                 return ResultadoOperacao<TDto>.Falha($"Falha ao consultar! Detalhes: {ex.Message}");
             }
         }
+
 
         public async Task<ResultadoOperacao<TDto>> PostAsync<TDto>(string url, TDto dto)
         {

@@ -13,6 +13,7 @@ using Hiper.Erp.Aplicacao.Servicos.FormasPagamentos;
 using Hiper.Erp.Aplicacao.Servicos.Produtos;
 using Hiper.Erp.Aplicacao.Servicos.ServicosExternos;
 using Hiper.Erp.Aplicacao.Servicos.Vendas;
+using Hiper.Erp.Apresentacao.Api.Handlers;
 using Hiper.Erp.Apresentacao.Api.Middlewares;
 using Hiper.Erp.Infraestrutura.Bancos;
 using Hiper.Erp.Infraestrutura.Bancos.SGDBs.Fabricas;
@@ -36,10 +37,12 @@ builder.Services.AddScoped<ICacheService, CacheService>();
 
 
 // 2. Servidor de Administração (Centralizado)
+builder.Services.AddScoped<TenantHandler>();
 builder.Services.AddHttpClient<IServicoAdministrador, ServicoHiperAdm>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["HiperAdm:Url"] ?? "https://localhost:7125");
-});
+})
+.AddHttpMessageHandler<TenantHandler>();
 
 // 3. Contexto do Tenant (Scoped para cada requisição)
 builder.Services.AddScoped<ITenantContext, TenantContext>();
@@ -119,15 +122,18 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        var validIssuersConfig = builder.Configuration.GetSection("Jwt:ValidIssuers").Get<List<string>>();
+        var validIssuers = validIssuersConfig ?? new List<string> { builder.Configuration["Jwt:Issuer"] ?? "Hiper.Erp" };
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidIssuers = validIssuers,
+            ValidateAudience = false,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "ChaveMestraSuperSecreta123!")),
             ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromSeconds(30),
         };
     });
 
@@ -150,6 +156,8 @@ app.UseCors("CorsPolicy");
 
 // 9. Middleware de Tenant (Deve vir ANTES da Autenticação para configurar o banco)
 app.UseMiddleware<TenantMiddleware>();
+
+app.UseMiddleware<TokenStorageMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

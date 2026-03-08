@@ -48,7 +48,8 @@ builder.Services.AddScoped<IServicoVendasItens, ServicoVendasItens>();
 builder.Services.AddHttpClient("HiperAdm", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7125");
-});
+})
+.AddHttpMessageHandler<TenantHandler>();
 
 builder.Services.AddScoped<IServicoAdministrador, ServicoHiperAdm>(sp =>
 {
