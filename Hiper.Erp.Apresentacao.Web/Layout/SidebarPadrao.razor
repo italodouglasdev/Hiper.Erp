@@ -8,24 +8,13 @@
 @inject StorageServico StorageServico
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
+
     <NavLink href="/" class="brand-link" Match="NavLinkMatch.All">
         <span class="brand-text font-weight-light">Hiper ERP</span>
     </NavLink>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <!-- Sidebar user panel -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-                <img id="parametros-usuario-foto" src="images/user-default.png" class="elevation-2" alt="User Image">
-            </div>
-            <div class="info">
-                <a href="javascript:void(0);" class="d-block" @onclick='() => ChamarJS("CarregarModalFormulario", "Cadastro", "Agentes", 0)'>Usuário</a>
-            </div>
-        </div>
-
-        <!-- Sidebar Menu -->
+  
+    <div class="sidebar">  
+      
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
