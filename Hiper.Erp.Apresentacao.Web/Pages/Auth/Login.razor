@@ -7,10 +7,12 @@
 @using Hiper.Erp.Aplicacao.Dtos.ServicosExternos
 @using Hiper.Erp.Apresentacao.Web.Handlers
 @using Hiper.Erp.InterfaceUsuarios.RetaguardaWeb.Servicos
+@using Microsoft.AspNetCore.Components.Authorization
 
 @inject IServicoAdministrador ServicoAdmin
 @inject NavigationManager Navigation
 @inject StorageServico StorageServico
+@inject AuthenticationStateProvider AuthStateProvider
 
 
 <div class="login-box">
@@ -106,9 +108,13 @@
                 var resultado = await ServicoAdmin.Login(Email, Senha);
                 if (resultado.Sucesso && resultado.Dados != null)
                 {
-                    //TenantHandler.JwtToken = resultado.Dados.Token;
-
                     await StorageServico.SetItem(StorageKeys.Token, resultado.Dados.Token);
+
+                    // Notificar o AuthenticationStateProvider sobre a autenticação
+                    if (AuthStateProvider is CustomAuthenticationStateProvider customProvider)
+                    {
+                        await customProvider.MarkUserAsAuthenticated(resultado.Dados.Token);
+                    }
 
                     var resultadoLojas = await ServicoAdmin.Lojas();
                     if (resultadoLojas.Sucesso && resultadoLojas.Dados != null)
@@ -153,9 +159,6 @@
 
     private void FinalizarLogin()
     {
-        // No fluxo simplificado, o TenantId pode ser enviado uma vez no login
-        // ou extraído do token. Vamos manter o envio via header apenas se necessário,
-        // mas aqui já garantimos que o JwtToken está preenchido.
         Navigation.NavigateTo("/");
     }
 }

@@ -1,10 +1,17 @@
-﻿@inject IJSRuntime JS
+@using Microsoft.AspNetCore.Components.Authorization
+@using Hiper.Erp.Apresentacao.Web.Handlers
+@using Hiper.Erp.InterfaceUsuarios.RetaguardaWeb.Servicos
+
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+@inject StorageServico StorageServico
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="/" class="brand-link">
+    <NavLink href="/" class="brand-link" Match="NavLinkMatch.All">
         <span class="brand-text font-weight-light">Hiper ERP</span>
-    </a>
+    </NavLink>
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -23,10 +30,10 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
                 <li class="nav-item">
-                    <a href="javascript:void(0);" @onclick='() => ChamarJS("CarregarPartialView", "div-principal", "DashBoard", "DashBoardGeralVer", 0)' class="nav-link">
+                    <NavLink href="/" class="nav-link" Match="NavLinkMatch.All">
                         <i class="nav-icon fas fa-th-large"></i>
-                        <p> DashBoard </p>
-                    </a>
+                        <p>Início</p>
+                    </NavLink>
                 </li>
 
                 <li class="nav-item">
@@ -39,42 +46,36 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="/Auth/Login" class="nav-link">
+                            <NavLink href="/Agentes/Agente" class="nav-link" Match="NavLinkMatch.Prefix">
                                 <i class="nav-icon fas fa-user"></i>
-                                <p> Login</p>
-                            </a>
+                                <p>Agentes</p>
+                            </NavLink>
                         </li>
                         <li class="nav-item">
-                            <a href="/Agentes/Agente" class="nav-link">
-                                <i class="nav-icon fas fa-user"></i>
-                                <p> Agentes</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/FormasPagamentos/FormaPagamento" class="nav-link">
+                            <NavLink href="/FormasPagamentos/FormaPagamento" class="nav-link" Match="NavLinkMatch.Prefix">
                                 <i class="nav-icon fas fa-credit-card"></i>
-                                <p> Formas de Pagamento</p>
-                            </a>
+                                <p>Formas de Pagamento</p>
+                            </NavLink>
                         </li>
                         <li class="nav-item">
-                            <a href="/Produtos/Produto" class="nav-link">
+                            <NavLink href="/Produtos/Produto" class="nav-link" Match="NavLinkMatch.Prefix">
                                 <i class="nav-icon fas fa-box"></i>
-                                <p> Produtos</p>
-                            </a>
+                                <p>Produtos</p>
+                            </NavLink>
                         </li>
                         <li class="nav-item">
-                            <a href="/Vendas/Venda" class="nav-link">
+                            <NavLink href="/Vendas/Venda" class="nav-link" Match="NavLinkMatch.Prefix">
                                 <i class="nav-icon fas fa-shopping-cart"></i>
-                                <p> Vendas</p>
-                            </a>
-                        </li>                       
+                                <p>Vendas</p>
+                            </NavLink>
+                        </li>
                     </ul>
                 </li>
 
                 <li class="nav-item">
-                    <a href="javascript:void(0);" @onclick='() => ChamarJS("FazerLogout", "Auth", "Logout")' class="nav-link">
+                    <a href="javascript:void(0);" @onclick="EfetuarLogout" class="nav-link">
                         <i class="nav-icon fas fa-door-open"></i>
-                        <p> Sair </p>
+                        <p>Sair</p>
                     </a>
                 </li>
             </ul>
@@ -96,5 +97,34 @@
     private async Task ChamarJS(string funcao, params object[] parametros)
     {
         await JS.InvokeVoidAsync("blazorInterop.executarFuncaoGlobal", funcao, parametros);
+    }
+
+    private async Task EfetuarLogout()
+    {
+
+        var confirmado = await JS.InvokeAsync<bool>("MessageBoxConfirmacao", "Deseja realmente sair?");
+
+        if (confirmado)
+        {
+            try
+            {
+                if (AuthStateProvider is CustomAuthenticationStateProvider customProvider)
+                {
+                    await customProvider.MarkUserAsLoggedOut();
+                }
+
+                Navigation.NavigateTo("/Auth/Login", forceLoad: true);
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao fazer logout: {ex.Message}");
+
+                Navigation.NavigateTo("/Auth/Login", forceLoad: true);
+            }
+
+        }
+
+
     }
 }

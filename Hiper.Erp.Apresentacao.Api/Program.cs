@@ -157,15 +157,25 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
 
+// ⭐ NOVO: Servir arquivos estáticos do Blazor ANTES do roteamento
+app.UseStaticFiles();
+
 // 9. Middleware de Armazenamento de Token (Deve vir ANTES de Tenant para capturar o token)
 app.UseMiddleware<TokenStorageMiddleware>();
 
 // 10. Middleware de Tenant (Deve vir ANTES da Autenticação para configurar o banco)
 app.UseMiddleware<TenantMiddleware>();
 
+// ⭐ IMPORTANTE: UseRouting() DEVE vir ANTES de UseAuthentication() e UseAuthorization()
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// ⭐ NOVO: Fallback para Blazor WebAssembly
+// Qualquer rota não encontrada retorna index.html
+app.MapFallbackToFile("index.html");
 
 app.Run();

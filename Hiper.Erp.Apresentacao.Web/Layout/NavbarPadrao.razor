@@ -1,3 +1,11 @@
+@using Microsoft.AspNetCore.Components.Authorization
+@using Hiper.Erp.Apresentacao.Web.Handlers
+@using Hiper.Erp.InterfaceUsuarios.RetaguardaWeb.Servicos
+
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+@inject StorageServico StorageServico
+
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <ul class="navbar-nav">
         <li class="nav-item">
@@ -7,4 +15,38 @@
             <a href="/" class="nav-link">Início</a>
         </li>
     </ul>
+
+    <!-- Navbar Menu (Direita) -->
+    <ul class="navbar-nav ml-auto">
+        <!-- Botão de Logout -->
+        <li class="nav-item">
+            <a href="javascript:void(0);" @onclick="EfetuarLogout" class="nav-link" title="Sair da aplicação">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </li>
+    </ul>
 </nav>
+
+@code {
+    private async Task EfetuarLogout()
+    {
+        try
+        {
+            // Obter o AuthenticationStateProvider customizado
+            if (AuthStateProvider is CustomAuthenticationStateProvider customProvider)
+            {
+                // Limpar o storage e notificar logout
+                await customProvider.MarkUserAsLoggedOut();
+            }
+
+            // Redirecionar para login
+            Navigation.NavigateTo("/Auth/Login", forceLoad: true);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Erro ao fazer logout: {ex.Message}");
+            // Mesmo com erro, redireciona para login
+            Navigation.NavigateTo("/Auth/Login", forceLoad: true);
+        }
+    }
+}

@@ -134,8 +134,7 @@
     }
 
     private void Editar(DtoAgente agente)
-    {
-        // Clone para evitar alteração direta na lista antes de salvar
+    {       
         this.agente = new DtoAgente
         {
             Codigo = agente.Codigo,
@@ -143,16 +142,7 @@
             FantasiaApelido = agente.FantasiaApelido,
             CnpjCpf = agente.CnpjCpf,
             Ativo = agente.Ativo,
-            AgenteCliente = agente.AgenteCliente,
-            // AgenteFornecedor = agente.AgenteFornecedor,
-            // AgenteColaborador = agente.AgenteColaborador,
-            // AgenteContador = agente.AgenteContador,
-            // AgenteAdministradoraCartao = agente.AgenteAdministradoraCartao,
-            // Tipo = agente.Tipo,
-            // IeRg = agente.IeRg,
-            // Im = agente.Im,
-            // CRC = agente.CRC,
-            // ICMS = agente.ICMS,
+            AgenteCliente = agente.AgenteCliente,            
             Observacao = agente.Observacao
         };
         exibirModal = true;

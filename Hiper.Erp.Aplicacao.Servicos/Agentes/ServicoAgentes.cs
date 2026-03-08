@@ -83,7 +83,7 @@ namespace Hiper.Erp.Aplicacao.Servicos.Agentes
 
                 resultado.Dados = mapeador.Map<List<DtoAgente>>(repAgenteResultado.Dados);
 
-                resultado.AdicionarPaginacao(1, repAgenteResultado.Dados.Count, 100);
+                resultado.AdicionarPaginacao(1, repAgenteResultado?.Dados?.Count ?? 0, 100);
             }
             catch (Exception ex)
             {

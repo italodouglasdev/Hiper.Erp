@@ -20,6 +20,7 @@ using Hiper.Erp.Infraestrutura.Repositorios.API.FormasPagamentos;
 using Hiper.Erp.Infraestrutura.Repositorios.API.Produtos;
 using Hiper.Erp.Infraestrutura.Repositorios.API.Vendas;
 using Hiper.Erp.InterfaceUsuarios.RetaguardaWeb.Servicos;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -32,6 +33,9 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<ModalServico>();
 builder.Services.AddScoped<StorageServico>();
 builder.Services.AddTransient<TenantHandler>();
+
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+builder.Services.AddAuthorizationCore();
 
 builder.Services.AddAutoMapper(typeof(MapeadorRetaguarda));
 
