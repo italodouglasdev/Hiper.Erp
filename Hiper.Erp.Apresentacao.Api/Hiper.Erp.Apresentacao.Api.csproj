@@ -12,6 +12,7 @@
     <ProjectReference Include="..\Hiper.Erp.Aplicacao.Servicos\Hiper.Erp.Aplicacao.Servicos.csproj" />
     <ProjectReference Include="..\Hiper.Erp.Infraestrutura.Cache\Hiper.Erp.Infraestrutura.Cache.csproj" />
     <ProjectReference Include="..\Hiper.Erp.Infraestrutura.Repositorios\Hiper.Erp.Infraestrutura.Repositorios.csproj" />
+    <ProjectReference Include="..\Hiper.Erp.Utilitarios.CriptografiaHelper\Hiper.Erp.Utilitarios.CriptografiaHelper.csproj" />
   </ItemGroup>
 
   <ItemGroup>

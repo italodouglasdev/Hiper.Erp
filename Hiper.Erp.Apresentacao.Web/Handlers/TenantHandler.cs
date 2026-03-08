@@ -24,7 +24,7 @@ namespace Hiper.Erp.Apresentacao.Web.Handlers
 
             if (!string.IsNullOrWhiteSpace(tenantId))
             {
-                request.Headers.Add("XTenantId", tenantId);
+                request.Headers.Add("X-Tenant-Id", tenantId);
             }
 
             return await base.SendAsync(request, cancellationToken);

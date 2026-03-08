@@ -54,18 +54,9 @@ builder.Services.AddScoped<ITenantContext, TenantContext>();
 builder.Services.AddScoped<RetaguardaDbContext>(provider =>
 {
     var tenantContext = provider.GetRequiredService<ITenantContext>();
-
-    // Se não houver conexão configurada (ex: rota pública ou erro no middleware), usa uma padrão
-    if (string.IsNullOrEmpty(tenantContext.ConnectionString))
-    {
-        // Fallback para banco padrão ou erro controlado
-        return FabricaConexoes.CriarContexto(
-            Hiper.Erp.Dominio.Enumeradores.EnumTipoSgdb.SQLServer,
-             "Data Source=localhost;Initial Catalog=HiperErp_Loja_0001; User ID=SA; Password=Y5hAmR9cJNKmGeY;TrustServerCertificate=True;");
-    }
-
-    // Cria o contexto dinamicamente baseado no Tenant resolvido pelo Middleware
+  
     return FabricaConexoes.CriarContexto(tenantContext.TipoSgdb, tenantContext.ConnectionString);
+
 });
 
 

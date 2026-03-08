@@ -25,6 +25,7 @@
     <Project Path="Hiper.Erp.Testes.TestesUnitarios/Hiper.Erp.Testes.TestesUnitarios.csproj" />
   </Folder>
   <Folder Name="/Utilitarios/">
+    <Project Path="Hiper.Erp.Utilitarios.CriptografiaHelper/Hiper.Erp.Utilitarios.CriptografiaHelper.csproj" Id="a9521b77-76bb-43a5-a806-b0261651c48f" />
     <Project Path="Hiper.Erp.Utilitarios.ValidadorHelper/Hiper.Erp.Utilitarios.ValidadorHelper.csproj" />
   </Folder>
 </Solution>

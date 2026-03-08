@@ -1,4 +1,5 @@
-﻿using Hiper.Erp.Aplicacao.Dtos.ServicosExternos;
+﻿using Hiper.Adm.Utilitarios.CriptografiaHelper;
+using Hiper.Erp.Aplicacao.Dtos.ServicosExternos;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.ServicosExternos;
 using Hiper.Erp.Infraestrutura.Cache;
 using System.Security.Claims;
@@ -17,7 +18,7 @@ namespace Hiper.Erp.Apresentacao.Api.Middlewares
         public async Task InvokeAsync(HttpContext context, ITenantContext tenantContext, ICacheService cacheService, IServicoAdministrador servicoAdmin)
         {
             // 1. Tenta obter o TenantId da Claim "X-Tenant-Id" dentro do JWT
-            string? tenantId = context.User.FindFirst("X-Tenant-Id")?.Value;
+            var tenantId = context.User.FindFirst("X-Tenant-Id")?.Value ?? context.Request.Headers["x-tenant-id"].FirstOrDefault();                       
 
             // 2. Fallback para o Header (útil para testes iniciais ou se não estiver no token)
             if (string.IsNullOrEmpty(tenantId) && context.Request.Headers.TryGetValue("X-Tenant-Id", out var headerTenantId))
@@ -45,7 +46,7 @@ namespace Hiper.Erp.Apresentacao.Api.Middlewares
 
                 if (config != null)
                 {
-                    tenantContext.ConnectionString = config.ConnectionString;
+                    tenantContext.ConnectionString = AES.Decrypt(config.ConnectionString, "ChaveExtraParaConnectionString");
                     tenantContext.TipoSgdb = config.TipoSgdb;
                 }
             }
