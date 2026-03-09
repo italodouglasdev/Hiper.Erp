@@ -56,7 +56,7 @@ builder.Services.AddScoped<ITenantContext, TenantContext>();
 builder.Services.AddScoped<RetaguardaDbContext>(provider =>
 {
     var tenantContext = provider.GetRequiredService<ITenantContext>();
-
+  
     return FabricaConexoes.CriarContexto(tenantContext.TipoSgdb, tenantContext.ConnectionString);
 
 });

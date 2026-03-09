@@ -95,7 +95,7 @@ namespace Hiper.Erp.Apresentacao.Api.Controllers.Agentes
 
             if (!resultadoServico.Sucesso)
                 return NotFound(ResponseHttp<DtoAgente>.NotFound(resultadoServico));
-    
+          
             await _mensageriaServico.PublicarMensagemAsync(
                 "fila-email-boas-vindas",
                 new MensagemBoasVindasDto
