@@ -49,8 +49,8 @@ namespace Hiper.Erp.Infraestrutura.Mensageria
                 // Lê as configurações do RabbitMQ a partir do appsettings.json
                 var hostName = _configuration["RabbitMQ:HostName"] ?? "localhost";
                 var port = int.Parse(_configuration["RabbitMQ:Port"] ?? "5672");
-                var userName = _configuration["RabbitMQ:UserName"] ?? "guest";
-                var password = _configuration["RabbitMQ:Password"] ?? "guest";
+                var userName = _configuration["RabbitMQ:UserName"] ?? throw new InvalidOperationException("RabbitMQ:UserName não configurado no appsettings.json.");
+                var password = _configuration["RabbitMQ:Password"] ?? throw new InvalidOperationException("RabbitMQ:Password não configurado no appsettings.json.");
 
                 // Cria a fábrica de conexões com os parâmetros configurados
                 var factory = new ConnectionFactory

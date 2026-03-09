@@ -23,6 +23,7 @@
     <Project Path="Hiper.Erp.Infraestrutura.Repositorios/Hiper.Erp.Infraestrutura.Repositorios.csproj" />
   </Folder>
   <Folder Name="/Testes/">
+    <Project Path="Hiper.Erp.Testes.TestesUnitarios/Hiper.Erp.Testes.TestesUnitarios.csproj" />
     <Project Path="Hiper.Erp.Testes.XUnitTestes/Hiper.Erp.Testes.XUnitTestes.csproj" />
   </Folder>
   <Folder Name="/Utilitarios/">

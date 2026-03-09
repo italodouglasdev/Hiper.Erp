@@ -1,4 +1,4 @@
-﻿using Hiper.Adm.Utilitarios.CriptografiaHelper;
+using Hiper.Adm.Utilitarios.CriptografiaHelper;
 using Hiper.Erp.Aplicacao.Dtos.ServicosExternos;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.ServicosExternos;
 using Hiper.Erp.Infraestrutura.Cache;
@@ -9,10 +9,12 @@ namespace Hiper.Erp.Apresentacao.Api.Middlewares
     public class TenantMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly IConfiguration _configuration;
 
-        public TenantMiddleware(RequestDelegate next)
+        public TenantMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
+            _configuration = configuration;
         }
 
         public async Task InvokeAsync(HttpContext context, ITenantContext tenantContext, ICacheService cacheService, IServicoAdministrador servicoAdmin)
@@ -46,7 +48,8 @@ namespace Hiper.Erp.Apresentacao.Api.Middlewares
 
                 if (config != null)
                 {
-                    tenantContext.ConnectionString = AES.Decrypt(config.ConnectionString, "ChaveExtraParaConnectionString");
+                    var chaveAes = _configuration["Seguranca:ChaveAesConnectionString"] ?? "ChavePadrao";
+                    tenantContext.ConnectionString = AES.Decrypt(config.ConnectionString, chaveAes);
                     tenantContext.TipoSgdb = config.TipoSgdb;
                 }
             }
