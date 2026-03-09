@@ -1,4 +1,4 @@
-# Hiper.Erp - Desafio Técnico (Engenharia de Software Sr.)
+# Hiper.Erp - Sistema de Gestão Empresarial
 
 ![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?style=for-the-badge&logo=dotnet)
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp)
@@ -89,7 +89,8 @@ A aplicação encontra-se publicada em uma VPS Windows Server 2019 utilizando II
 
 - **API REST:** `api.hiper.italodouglas.dev`
 - **Frontend (Retaguarda):** `retaguarda.hiper.italodouglas.dev`
-- **RabbitMQ:** `158.69.98.136:5672`
+- **RabbitMQ:** `rabbit.hiper.italodouglas.dev`
 
 ---
-*Desenvolvido por Ítalo Douglas para o processo seletivo da Hiper.*
+*Desenvolvido por [Ítalo Douglas](https://italodouglas.dev).*
+
