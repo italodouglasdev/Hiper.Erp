@@ -1,7 +1,9 @@
-﻿using Hiper.Erp.Aplicacao.Dtos.Agentes;
+using Hiper.Erp.Aplicacao.Dtos.Agentes;
+using Hiper.Erp.Aplicacao.Dtos.Mensageria;
 using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Filtros;
 using Hiper.Erp.Aplicacao.Dtos.ObjetosDeValor.Wrappers;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.Agentes;
+using Hiper.Erp.Aplicacao.Interfaces.Servicos.Mensageria;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,10 +17,12 @@ namespace Hiper.Erp.Apresentacao.Api.Controllers.Agentes
     {
 
         private IServicoAgentes servicoAgentes;
+        private readonly IMensageriaServico _mensageriaServico;
 
-        public AgentesController(IServicoAgentes servicoAgentes)
+        public AgentesController(IServicoAgentes servicoAgentes, IMensageriaServico mensageriaServico)
         {
             this.servicoAgentes = servicoAgentes;
+            _mensageriaServico = mensageriaServico;
         }
 
 
@@ -91,6 +95,20 @@ namespace Hiper.Erp.Apresentacao.Api.Controllers.Agentes
 
             if (!resultadoServico.Sucesso)
                 return NotFound(ResponseHttp<DtoAgente>.NotFound(resultadoServico));
+    
+            await _mensageriaServico.PublicarMensagemAsync(
+                "fila-email-boas-vindas",
+                new MensagemBoasVindasDto
+                {
+                    CodigoAgente = resultadoServico.Dados.Codigo,
+                    RazaoNome = resultadoServico.Dados.RazaoNome,
+                    FantasiaApelido = resultadoServico.Dados.FantasiaApelido,
+                    CnpjCpf = resultadoServico.Dados.CnpjCpf,
+                    Tipo = "BoasVindas",
+                    DataCriacao = DateTime.UtcNow,
+                    Descricao = $"Novo cliente '{resultadoServico.Dados.RazaoNome}' cadastrado. Enviar e-mail de boas-vindas."
+                }
+            );
 
             return Ok(ResponseHttp<DtoAgente>.Ok(resultadoServico));
         }

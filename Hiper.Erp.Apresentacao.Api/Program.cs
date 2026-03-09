@@ -4,6 +4,7 @@ using Hiper.Erp.Aplicacao.Interfaces.Repositorios.Produtos;
 using Hiper.Erp.Aplicacao.Interfaces.Repositorios.Vendas;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.Agentes;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.FormasPagamentos;
+using Hiper.Erp.Aplicacao.Interfaces.Servicos.Mensageria;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.Produtos;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.ServicosExternos;
 using Hiper.Erp.Aplicacao.Interfaces.Servicos.Vendas;
@@ -17,6 +18,7 @@ using Hiper.Erp.Apresentacao.Api.Middlewares;
 using Hiper.Erp.Infraestrutura.Bancos;
 using Hiper.Erp.Infraestrutura.Bancos.SGDBs.Fabricas;
 using Hiper.Erp.Infraestrutura.Cache;
+using Hiper.Erp.Infraestrutura.Mensageria;
 using Hiper.Erp.Infraestrutura.Repositorios.Agentes;
 using Hiper.Erp.Infraestrutura.Repositorios.FormasPagamentos;
 using Hiper.Erp.Infraestrutura.Repositorios.Produtos;
@@ -54,7 +56,7 @@ builder.Services.AddScoped<ITenantContext, TenantContext>();
 builder.Services.AddScoped<RetaguardaDbContext>(provider =>
 {
     var tenantContext = provider.GetRequiredService<ITenantContext>();
-  
+
     return FabricaConexoes.CriarContexto(tenantContext.TipoSgdb, tenantContext.ConnectionString);
 
 });
@@ -76,12 +78,19 @@ builder.Services.AddScoped<IServicoVendas, ServicoVendas>();
 builder.Services.AddScoped<IServicoVendasItens, ServicoVendasItens>();
 
 
-// 7. Mapeador
+// 7. Serviço de Mensageria (RabbitMQ)
+// Registrado como Singleton pois a conexão com o RabbitMQ pode ser reutilizada entre requisições.
+// A implementação cria conexões sob demanda a cada publicação, então Scoped também funcionaria,
+// mas Singleton evita instanciar o serviço repetidamente.
+builder.Services.AddSingleton<IMensageriaServico, RabbitMqMensageriaServico>();
+
+
+// 8. Mapeador
 builder.Services.AddAutoMapper(typeof(MapeadorRetaguarda));
 
 
 
-// 8. Swagger e Autenticação
+// 9. Swagger e Autenticação
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
