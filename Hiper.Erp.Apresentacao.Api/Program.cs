@@ -56,7 +56,7 @@ builder.Services.AddScoped<ITenantContext, TenantContext>();
 builder.Services.AddScoped<RetaguardaDbContext>(provider =>
 {
     var tenantContext = provider.GetRequiredService<ITenantContext>();
-  
+
     return FabricaConexoes.CriarContexto(tenantContext.TipoSgdb, tenantContext.ConnectionString);
 
 });
@@ -147,14 +147,15 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Middlewares Pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+
+app.UseRouting();
 
 app.UseCors("CorsPolicy");
 

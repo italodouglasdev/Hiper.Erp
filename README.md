@@ -87,9 +87,12 @@ Para rodar a aplicação localmente ou em produção, é **obrigatório** preenc
 
 A aplicação encontra-se publicada em uma VPS Windows Server 2019 utilizando IIS e está disponível nos seguintes endereços:
 
-- **API REST:** `api.hiper.italodouglas.dev`
-- **Frontend (Retaguarda):** `retaguarda.hiper.italodouglas.dev`
-- **RabbitMQ:** `rabbit.hiper.italodouglas.dev`
+| Serviço | URL |
+|---------|-----|
+| **API do Servidor de Autenticação (Tenants)** | [adm.hiper.italodouglas.dev](https://adm.hiper.italodouglas.dev/swagger) |
+| **API REST** | [api.hiper.italodouglas.dev](https://api.hiper.italodouglas.dev/swagger) |
+| **Frontend (Retaguarda)** | [retaguarda.hiper.italodouglas.dev](https://retaguarda.hiper.italodouglas.dev/) |
+| **RabbitMQ** | [rabbit.hiper.italodouglas.dev](https://rabbit.hiper.italodouglas.dev/) |
 
 ---
 *Desenvolvido por [Ítalo Douglas](https://italodouglas.dev).*

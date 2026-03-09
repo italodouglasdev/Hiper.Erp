@@ -54,6 +54,7 @@ builder.Services.AddScoped<IServicoVendasItens, ServicoVendasItens>();
 builder.Services.AddHttpClient("HiperAdm", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7125");
+    //client.BaseAddress = new Uri("https://adm.hiper.italodouglas.dev");
 })
 .AddHttpMessageHandler<TenantHandler>();
 
@@ -67,6 +68,8 @@ builder.Services.AddScoped<IServicoAdministrador>(sp =>
 builder.Services.AddHttpClient("HiperApi", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7126");
+    //client.BaseAddress = new Uri("https://api.hiper.italodouglas.dev");
+
 })
 .AddHttpMessageHandler<TenantHandler>();
 
