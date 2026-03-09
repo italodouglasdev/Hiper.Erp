@@ -57,6 +57,15 @@ builder.Services.AddScoped<RetaguardaDbContext>(provider =>
 {
     var tenantContext = provider.GetRequiredService<ITenantContext>();
 
+    // Se não houver conexão configurada (ex: rota pública ou erro no middleware), usa uma padrão
+    if (string.IsNullOrEmpty(tenantContext.ConnectionString))
+    {
+        // Fallback para banco padrão ou erro controlado
+        return FabricaConexoes.CriarContexto(
+            Hiper.Erp.Dominio.Enumeradores.EnumTipoSgdb.SQLServer,
+             "Data Source=localhost;Initial Catalog=HiperErp_Loja_0001; User ID=SA; Password=Y5hAmR9cJNKmGeY;TrustServerCertificate=True;");
+    }
+
     return FabricaConexoes.CriarContexto(tenantContext.TipoSgdb, tenantContext.ConnectionString);
 
 });
@@ -96,6 +105,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Hiper ERP - API", Version = "v1" });
 
+    // 1. Configuração do Bearer Token (JWT)
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -120,6 +130,9 @@ builder.Services.AddSwaggerGen(options =>
             Array.Empty<string>()
         }
     });
+
+    // 2. Adicionar o campo X-Tenant-Id globalmente para todos os endpoints
+    options.OperationFilter<TenantHeaderFilter>();
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
